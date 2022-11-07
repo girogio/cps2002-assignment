@@ -2,7 +2,7 @@ const User = require('../models/User')
 var expect = require('chai').expect;
 
 describe('Testing user model', () => {
-
+  let user;
   beforeEach(() => {
     sampleUser = {
       name: 'John Doe',
@@ -15,13 +15,11 @@ describe('Testing user model', () => {
     user.validate((err) => {
       expect(err.errors.name).to.exist
       expect(err.errors.email).to.exist
-
     })
   })
 
   it('it should create the user successfully with correct parameters', (done) => {
     let user = new User({ ...sampleUser })
-
     user.validate((err) => {
       expect(err).to.not.exist
       done()
