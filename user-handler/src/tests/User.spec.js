@@ -10,15 +10,16 @@ describe('Testing user model', () => {
     }
   })
 
-  it('should throw an error due to empty fields', () => {
+  it('it should throw an error due to empty fields', () => {
     let user = new User()
     user.validate((err) => {
-      expect(err.errors.full_name).to.exist
+      expect(err.errors.name).to.exist
       expect(err.errors.email).to.exist
+
     })
   })
 
-  it('should create the user successfully with correct parameters', (done) => {
+  it('it should create the user successfully with correct parameters', (done) => {
     let user = new User({ ...sampleUser })
 
     user.validate((err) => {
@@ -26,5 +27,7 @@ describe('Testing user model', () => {
       done()
     });
   });
+
+
 
 });
