@@ -15,7 +15,6 @@ describe('Testing user model', () => {
     user.validate((err) => {
       expect(err.errors.name).to.exist
       expect(err.errors.email).to.exist
-      done()
     })
   })
 
