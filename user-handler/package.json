@@ -2,6 +2,7 @@
   "name": "user-handler",
   "version": "1.0.0",
   "main": "run.js",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "ci": "yarn install",
