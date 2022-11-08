@@ -3,15 +3,14 @@ const expect = chai.expect;
 const sinon = require("sinon");
 const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
+
 const rewire = require("rewire");
-
-const mongoose = require("mongoose");
-
 const sandbox = sinon.createSandbox();
 
-const User = require("../models/userModel.js");
 
+const mongoose = require("mongoose");
 let userController = rewire("../controllers/userController.js");
+const User = require("../models/userModel.js");
 
 describe("Testing the user controller", () => {
   let sampleUser;
