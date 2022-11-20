@@ -2,6 +2,7 @@ const User = require("../models/userModel.js");
 
 exports.createUser = (userObj) => {
   return new Promise((resolve, reject) => {
+
     let user = new User(userObj);
 
     if (user.name === undefined || user.email === undefined) {

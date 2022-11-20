@@ -13,6 +13,7 @@ router.post("/", (req, res) => {
       res.status(201).send("User created.");
     })
     .catch((error) => {
+      console.log(error)
       if (error === "User name and email are required.") {
         res.status(400).send(error);
       } else if (error === "User with this email already exists.") {
