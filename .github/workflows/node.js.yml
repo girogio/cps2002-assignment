@@ -29,6 +29,6 @@ jobs:
         cache: 'yarn'
         cache-dependency-path: 'user-handler/yarn.lock'
     - run: yarn ci
-      working-directory: user-handler
+      working-directory: user-handler-service
     - run: yarn test
-      working-directory: user-handler
+      working-directory: user-handler-service
