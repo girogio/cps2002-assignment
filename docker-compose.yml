@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-
+  # User microservice (Node.js and MongoDB)
   user-service:
     build: ./user-handler-service
     environment:
@@ -13,7 +13,6 @@ services:
       - user-network
     depends_on:
       - user-db
-
   user-db:
     image: mongo:latest
     ports:
