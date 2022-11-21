@@ -4,24 +4,14 @@ export default function Footer() {
   return (
     <footer className="footer flex-column flex-md-row border-top d-flex align-items-center justify-content-between px-4 py-2">
       <div>
-        <a className="text-decoration-none" href="https://coreui.io">CoreUI </a>
-        <a className="text-decoration-none" href="https://coreui.io">
-          Bootstrap Admin
-          Template
-        </a>
+        Giorgio Grigolo, Julianne Vella
         {' '}
-        © 2021
-        creativeLabs.
+        © 2022
+        Gorju Car Rentals.
       </div>
       <div className="ms-md-auto">
         Powered by&nbsp;
-        <a
-          className="text-decoration-none"
-          href="@layout/AdminLayout/AdminLayout"
-        >
-          CoreUI UI
-          Components
-        </a>
+        coffee.
       </div>
     </footer>
   )
