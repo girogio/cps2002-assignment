@@ -27,6 +27,18 @@ exports.createUser = (userObj) => {
   });
 };
 
+exports.deleteUserById = (id) => {
+  return new Promise((resolve, reject) => {
+    User.findByIdAndDelete(id)
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 exports.getUserById = (id) => {
   if (id === undefined) 
   throw new Error("User id is required.");

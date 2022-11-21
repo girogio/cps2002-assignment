@@ -53,14 +53,14 @@ router.get("/:id", (req, res) => {
 //   })
 // })
 
-// // Delete a user by id
-// router.delete('/:id', (req, res) => {
-//   User.findByIdAndDelete(req.params.id).then(() => {
-//     res.status(200).send('User deleted.')
-//   }).catch((error) => {
-//     res.status(400).send(error)
-//   })
-// })
+// Delete a user by id
+router.delete('/:id', (req, res) => {
+  userController.deleteUserById(req.params.id).then(() => {
+    res.status(200).send('User deleted.')
+  }).catch((error) => {
+    res.status(400).send(error)
+  })
+})
 
 // Delete all users
 router.delete("/", (req, res) => {
