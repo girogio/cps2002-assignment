@@ -14,12 +14,13 @@ import {
   faVenus,
 } from '@fortawesome/free-solid-svg-icons'
 import {
-  Button, ButtonGroup, Card, Dropdown, ProgressBar,
+  Button, ButtonGroup, Form, Card, Dropdown, ProgressBar,
 } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 
 
 type User = { _id: string, name: string, email: string, cars_rented: number, date_created: string, last_login: string }
+
 
 
 const Home: NextPage = () => {
@@ -38,7 +39,27 @@ const Home: NextPage = () => {
   const deleteUser = (id: string) => {
     axios.delete(`http://localhost:3001/api/users/${id}`)
       .then((response) => {
-        console.log
+        console.log(response)
+      })
+  }
+
+  const createUser = (event: any) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const form = event.currentTarget
+    const email = form.formBasicEmail.value
+    const name = form.formBasicName.value
+
+    axios.post('http://localhost:3001/api/users', { name, email })
+      .then((response) => {
+        console.log(response)
+
+        if(response.status === 201) {
+          form.formBasicEmail.value = ''
+          form.formBasicName.value = ''
+        }
+
       })
   }
 
@@ -46,9 +67,32 @@ const Home: NextPage = () => {
     <AdminLayout>
       <div className="row">
         <div className="col-md-12">
+          <Card>
+            <Card.Header>
+              Create user
+            </Card.Header>
+            <Card.Body>
+              <Form onSubmit={createUser}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control required type="email" placeholder="example@email.com" />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicName">
+                  <Form.Label>Full Name</Form.Label>
+                  <Form.Control required type="name" placeholder="John Doe" />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+
+          <br />
           <Card className="mb-4">
             <Card.Header>
-              User Databas
+              User Database
             </Card.Header>
             <Card.Body>
               <div className="table-responsive">
