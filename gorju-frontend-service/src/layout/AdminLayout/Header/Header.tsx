@@ -50,10 +50,6 @@ export default function Header(props: HeaderProps) {
           <HeaderProfileNav />
         </div>
       </Container>
-      <div className="header-divider border-top my-2 ms-n2 me-n2" />
-      <Container fluid>
-        <Breadcrumb />
-      </Container>
     </header>
   )
 }
