@@ -1,14 +1,23 @@
 version: "3"
 
 services:
+  # Frontend (React and next.js)
+  frontend-service:
+    build: ./gorju-frontend-service
+    ports:
+      - "3000:3000"
+    networks:
+      - user-network
+    depends_on:
+      - user-service
   # User microservice (Node.js and MongoDB)
   user-service:
     build: ./user-handler-service
     environment:
       - SERVICE_PORT=3000
-      - DATABASE_URL=mongodb://user-db:27017/gorju-cars      
+      - DATABASE_URL=mongodb://user-db:27017/gorju-cars
     ports:
-      - "3000:3000"
+      - "3001:3000"
     networks:
       - user-network
     depends_on:
@@ -22,6 +31,7 @@ services:
 
 volumes:
   db-data:
-  
+
+
 networks:
   user-network:
