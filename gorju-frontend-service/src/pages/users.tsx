@@ -13,7 +13,7 @@ import {
 
 type User = { _id: string, name: string, email: string, cars_rented: number, date_created: string, last_login: string }
 
-const Home: NextPage = () => {
+const UsersPage: NextPage = () => {
   const [users, setUsers] = React.useState<User[]>([])
 
   type Toast = { title: string, body: string, type: string, visibility: boolean }
@@ -44,7 +44,7 @@ const Home: NextPage = () => {
   const deleteUser = (id: string) => {
     axios.delete(`http://localhost:3001/api/users/${id}`)
       .then((response) => {
-        addToast('Success', response.data, 'success')
+        addToast('Success', response.data, 'info')
       }).catch((error) => {
         addToast('Error', error.message, 'warning')
       })
@@ -64,7 +64,7 @@ const Home: NextPage = () => {
         if (response.status === 201) {
           form.formBasicEmail.value = ''
           form.formBasicName.value = ''
-          addToast('Success', response.data, 'success')
+          addToast('Success', response.data, 'info')
         }
       }).catch((error) => {
         addToast('Error', error.message, 'warning')
@@ -191,4 +191,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default UsersPage
