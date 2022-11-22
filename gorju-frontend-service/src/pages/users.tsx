@@ -15,12 +15,21 @@ type User = { _id: string, name: string, email: string, cars_rented: number, dat
 
 const Home: NextPage = () => {
   const [users, setUsers] = React.useState<User[]>([])
-  const [toastVisibility, setToastVisibility] = React.useState<boolean>(false)
-  const [toastTitle, setToastTitle] = React.useState<string>('')
-  const [toastBody, setToastBody] = React.useState<string>('')
-  const [toastType, setToastType] = React.useState<string>('')
 
-  const showToast = () => setToastVisibility(!toastVisibility)
+  type Toast = { title: string, body: string, type: string, visibility: boolean }
+
+  const [toasts, setToasts] = React.useState<Toast[]>([])
+
+  const addToast = (title: string, body: string, type: string) => {
+    setToasts([...toasts, { title, body, type, visibility: true }])
+  }
+
+  const toggleToast = (index: number) => {
+    const newToasts = [...toasts]
+    newToasts[index].visibility = !newToasts[index].visibility
+    setToasts(newToasts)
+  }
+
 
   useEffect(() => {
     axios.get('http://localhost:3001/api/users')
@@ -35,7 +44,9 @@ const Home: NextPage = () => {
   const deleteUser = (id: string) => {
     axios.delete(`http://localhost:3001/api/users/${id}`)
       .then((response) => {
-        console.log(response)
+        addToast('Success', response.data, 'success')
+      }).catch((error) => {
+        addToast('Error', error.message, 'warning')
       })
   }
 
@@ -46,7 +57,6 @@ const Home: NextPage = () => {
     const form = event.currentTarget
     const email = form.formBasicEmail.value
     const name = form.formBasicName.value
-    showToast();
 
     axios.post('http://localhost:3001/api/users', { name, email })
       .then((response) => {
@@ -54,18 +64,10 @@ const Home: NextPage = () => {
         if (response.status === 201) {
           form.formBasicEmail.value = ''
           form.formBasicName.value = ''
-
-          setToastTitle('Success')
-          setToastType('info')
-          setToastBody(response.data)
-          showToast()
+          addToast('Success', response.data, 'success')
         }
-
       }).catch((error) => {
-        setToastTitle('Error')
-        setToastType('warning')
-        setToastBody(error.message)
-        showToast()
+        addToast('Error', error.message, 'warning')
       })
   }
 
@@ -77,12 +79,20 @@ const Home: NextPage = () => {
         className="relative"
       >
         <ToastContainer className="p-3" position={'bottom-start'}>
-          <Toast delay={3000} bg={toastType} autohide onClose={() => setToastVisibility(false)} show={toastVisibility} >
-            <Toast.Header closeButton={false}>
-              <strong>{toastTitle}</strong>
-            </Toast.Header>
-            <Toast.Body>{toastBody}</Toast.Body>
-          </Toast>
+          {toasts.map((toast: Toast, i) => (
+            <Toast
+              bg={toast.type}
+              onClose={() => toggleToast(i)}
+              show={toast.visibility}
+              delay={3000}
+              autohide
+            >
+              <Toast.Header>
+                <strong className="me-auto">{toast.title}</strong>
+              </Toast.Header>
+              <Toast.Body>{toast.body}</Toast.Body>
+            </Toast>
+          ))}
         </ToastContainer>
       </div>
       <div className="row">
