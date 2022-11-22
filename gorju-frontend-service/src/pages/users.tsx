@@ -8,13 +8,14 @@ import axios from 'axios'
 import type { NextPage } from 'next'
 import React, { useEffect } from 'react'
 import {
-  Button, Card, Dropdown, Form, Toast, ToastContainer
+  Button, Card, Dropdown, Form, Toast, ToastContainer, Alert
 } from 'react-bootstrap'
 
 type User = { _id: string, name: string, email: string, cars_rented: number, date_created: string, last_login: string }
 
 const UsersPage: NextPage = () => {
   const [users, setUsers] = React.useState<User[]>([])
+  const [userServiceActive, setUserServiceActive] = React.useState<boolean>(false)
 
   type Toast = { title: string, body: string, type: string, visibility: boolean }
 
@@ -30,7 +31,16 @@ const UsersPage: NextPage = () => {
     setToasts(newToasts)
   }
 
+  // Prepare health check
+  useEffect(() => {
+    axios.get('http://localhost:3001/api/')
+      .then((res) => {
+        res.data.success === true ? setUserServiceActive(true) : setUserServiceActive(false)
+      })
+  }, [userServiceActive])
 
+
+  // Subscribe to user fetch endpoint
   useEffect(() => {
     axios.get('http://localhost:3001/api/users')
       .then((response) => {
@@ -41,6 +51,8 @@ const UsersPage: NextPage = () => {
       })
   }, [users])
 
+
+  // Utility function for deleting a user
   const deleteUser = (id: string) => {
     axios.delete(`http://localhost:3001/api/users/${id}`)
       .then((response) => {
@@ -50,20 +62,27 @@ const UsersPage: NextPage = () => {
       })
   }
 
+  // Utility function for updating a user
   const createUser = (event: any) => {
+
+    // Prevent page refresh
     event.preventDefault()
     event.stopPropagation()
 
+    // Get form data
     const form = event.currentTarget
     const email = form.formBasicEmail.value
     const name = form.formBasicName.value
 
+    // Send request
     axios.post('http://localhost:3001/api/users', { name, email })
       .then((response) => {
         console.log(response)
         if (response.status === 201) {
+          // Empty form
           form.formBasicEmail.value = ''
           form.formBasicName.value = ''
+          // Notify User
           addToast('Success', response.data, 'info')
         }
       }).catch((error) => {
@@ -97,6 +116,11 @@ const UsersPage: NextPage = () => {
       </div>
       <div className="row">
         <div className="col-md-12">
+
+          <Alert variant="danger" show={!userServiceActive}>
+            Could not estabilish connection with the user service. Please make sure that the user service is running.
+          </Alert>
+
           <Card>
             <Card.Header>
               Create user
@@ -187,7 +211,7 @@ const UsersPage: NextPage = () => {
           </Card>
         </div>
       </div>
-    </AdminLayout>
+    </AdminLayout >
   )
 }
 
