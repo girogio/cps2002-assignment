@@ -1,25 +1,14 @@
-import type { NextPage } from 'next'
+import {
+  faEllipsisVertical
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AdminLayout } from '@layout'
 import axios from 'axios'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faArrowDown,
-  faArrowUp,
-  faDownload,
-  faEllipsisVertical,
-  faMars,
-  faSearch,
-  faUsers,
-  faVenus,
-} from '@fortawesome/free-solid-svg-icons'
-import {
-  Button, ButtonGroup, Card, Dropdown, ProgressBar,
-} from 'react-bootstrap'
+import type { NextPage } from 'next'
 import React, { useEffect } from 'react'
-
+import { Card, Dropdown } from 'react-bootstrap'
 
 type User = { _id: string, name: string, email: string, cars_rented: number, date_created: string, last_login: string }
-
 
 const Home: NextPage = () => {
   const [users, setUsers] = React.useState<User[]>([])
