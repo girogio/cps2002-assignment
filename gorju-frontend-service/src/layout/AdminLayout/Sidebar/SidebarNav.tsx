@@ -1,29 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faAddressCard,
-  faBell,
-  faFileLines,
-  faStar,
   IconDefinition,
 } from '@fortawesome/free-regular-svg-icons'
 import {
-  faBug,
-  faCalculator,
-  faChartPie,
-  faChevronUp, faCode,
-  faDroplet,
-  faGauge,
-  faLayerGroup,
-  faLocationArrow,
+  faChevronUp,
   faPencil,
-  faPuzzlePiece,
-  faRightToBracket,
+  faUser,
+  faMotorcycle,
 } from '@fortawesome/free-solid-svg-icons'
 import React, {
   PropsWithChildren, useContext, useEffect, useState,
 } from 'react'
 import {
-  Accordion, AccordionContext, Badge, Button, Nav, useAccordionButton,
+  Accordion, AccordionContext, Button, Nav, useAccordionButton,
 } from 'react-bootstrap'
 import classNames from 'classnames'
 import Link from 'next/link'
@@ -129,9 +118,9 @@ const SidebarNavGroup = (props: SidebarNavGroupProps) => {
 export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
-      <SidebarNavGroup toggleIcon={faGauge} toggleText="Objects">
-        <SidebarNavItem href="users">Users</SidebarNavItem>
-      </SidebarNavGroup>
+      <SidebarNavItem icon={faPencil} href="users">Bookings</SidebarNavItem>
+      <SidebarNavItem icon={faUser} href="users">Users</SidebarNavItem>
+      <SidebarNavItem icon={faMotorcycle} href="users">Cars</SidebarNavItem>
     </ul>
   )
 }
