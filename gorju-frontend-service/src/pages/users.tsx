@@ -1,30 +1,26 @@
 
-import type { NextPage } from 'next'
+import {
+  faEllipsisVertical
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AdminLayout } from '@layout'
 import axios from 'axios'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faArrowDown,
-  faArrowUp,
-  faDownload,
-  faEllipsisVertical,
-  faMars,
-  faSearch,
-  faUsers,
-  faVenus,
-} from '@fortawesome/free-solid-svg-icons'
-import {
-  Button, ButtonGroup, Form, Card, Dropdown, ProgressBar,
-} from 'react-bootstrap'
+import type { NextPage } from 'next'
 import React, { useEffect } from 'react'
-
+import {
+  Button, Card, Dropdown, Form, Toast, ToastContainer
+} from 'react-bootstrap'
 
 type User = { _id: string, name: string, email: string, cars_rented: number, date_created: string, last_login: string }
 
-
-
 const Home: NextPage = () => {
   const [users, setUsers] = React.useState<User[]>([])
+  const [toastVisibility, setToastVisibility] = React.useState<boolean>(false)
+  const [toastTitle, setToastTitle] = React.useState<string>('')
+  const [toastBody, setToastBody] = React.useState<string>('')
+  const [toastType, setToastType] = React.useState<string>('')
+
+  const showToast = () => setToastVisibility(!toastVisibility)
 
   useEffect(() => {
     axios.get('http://localhost:3001/api/users')
@@ -50,21 +46,45 @@ const Home: NextPage = () => {
     const form = event.currentTarget
     const email = form.formBasicEmail.value
     const name = form.formBasicName.value
+    showToast();
 
     axios.post('http://localhost:3001/api/users', { name, email })
       .then((response) => {
         console.log(response)
-
-        if(response.status === 201) {
+        if (response.status === 201) {
           form.formBasicEmail.value = ''
           form.formBasicName.value = ''
+
+          setToastTitle('Success')
+          setToastType('info')
+          setToastBody(response.data)
+          showToast()
         }
 
+      }).catch((error) => {
+        setToastTitle('Error')
+        setToastType('warning')
+        setToastBody(error.message)
+        showToast()
       })
   }
 
   return (
     <AdminLayout>
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="relative"
+      >
+        <ToastContainer className="p-3" position={'bottom-start'}>
+          <Toast delay={3000} bg={toastType} autohide onClose={() => setToastVisibility(false)} show={toastVisibility} >
+            <Toast.Header closeButton={false}>
+              <strong>{toastTitle}</strong>
+            </Toast.Header>
+            <Toast.Body>{toastBody}</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      </div>
       <div className="row">
         <div className="col-md-12">
           <Card>
