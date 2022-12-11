@@ -26,7 +26,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-        cache-dependency-path: 'gorju/user-handler-service/yarn.lock'
+        cache-dependency-path: 'gorju/user-management/yarn.lock'
     - run: yarn ci
       working-directory: gorju/user-management
     - run: yarn test
