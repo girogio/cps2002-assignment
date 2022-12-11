@@ -2,7 +2,8 @@ name: Run tests – Java 11
 
 on:
   push:
-    branches:
+    branches: 
+      - main
       - julianne
   workflow_dispatch:
 
