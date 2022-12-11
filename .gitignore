@@ -1,3 +1,4 @@
 gorju-frontend-service/build/demo/faces/female/2.jpg
 *.png
 *.jpg
+__pycache__/
