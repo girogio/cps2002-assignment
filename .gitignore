@@ -1,4 +1,5 @@
 .idea/
+target/
 .DS_Store
 gorju-frontend-service/build/demo/faces/female/2.jpg
 *.png
