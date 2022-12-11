@@ -1,5 +1,4 @@
-# maven github workflow running maven clean test
-name: maven
+name: Run tests – Java 11
 
 on:
   push:
@@ -18,8 +17,8 @@ jobs:
         java-version: 11
         distribution: 'adopt'
         cache: maven
-    - name: Build with Maven
-      run: mvn -B clean test --file CPS2002-Gorju_Car_Rental/pom.xml
+    - name: tests
+      run: mvn -B clean test --file gorju/pom.xml
 
 # The above workflow will checkout the code from the repository and run the maven build. The workflow will be triggered on every push to the repository.
 
