@@ -18,7 +18,6 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v3
@@ -27,8 +26,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-        cache-dependency-path: 'user-handler-service/yarn.lock'
+        cache-dependency-path: 'gorju/user-handler-service/yarn.lock'
     - run: yarn ci
-      working-directory: user-handler-service
+      working-directory: gorju/user-management
     - run: yarn test
-      working-directory: user-handler-service
+      working-directory: gorju/user-management

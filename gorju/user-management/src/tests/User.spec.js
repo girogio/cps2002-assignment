@@ -201,26 +201,26 @@ describe("Testing the user controller", () => {
     })
   })
 
-  describe("Testing the updateUserById function", () => {
+  // describe("Testing the updateUserById function", () => {
 
-    it("it should resolve and update a user by id", async (done) => {
+  //   it("it should resolve and update a user by id", async (done) => {
 
-      editedUser = {
-        name: "John Dozer",
-        email: "john@dozer.com"
-      }
+  //     editedUser = {
+  //       name: "John Dozer",
+  //       email: "john@dozer.com"
+  //     }
 
-      // stub the save method 
-      saveStub = sandbox
-        .stub(mongoose.Model.prototype, "save")
-        .resolves();
+  //     // stub the save method 
+  //     saveStub = sandbox
+  //       .stub(mongoose.Model.prototype, "save")
+  //       .resolves();
 
-      const a = await userController.findByIdAndUpdate("1234", editedUser)
-      console.log(a)
+  //     const a = await userController.findByIdAndUpdate("1234", editedUser)
+  //     console.log(a)
 
-      done()
-    })
-  })
+  //     done()
+  //   })
+  // })
 });
 
 describe("Testing user model", () => {
