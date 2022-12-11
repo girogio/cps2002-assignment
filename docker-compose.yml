@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  frontend:
+    build: ./gorju/frontend
+    tty: true
+    stdin_open: true
+    networks:
+      - user-network
+    depends_on:
+      - user_app
+  # User microservice (Node.js and MongoDB)
+  user_app:
+    build: ./gorju/user-management
+    environment:
+      - SERVICE_PORT=3000
+      - DATABASE_URL=mongodb://user-db:27017/gorju-cars
+    ports:
+      - "3000:3000"
+    networks:
+      - user-network
+    depends_on:
+      - user-db
+  user-db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - user-network
+
+volumes:
+  db-data:
+
+
+networks:
+  user-network:
