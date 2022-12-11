@@ -8,7 +8,6 @@ const app = express()
 const db = mongoose.connection
 
 dotenv.config()
-console.log(process.env);
 
 app.use(express.json())
 app.use(cors())
