@@ -7,7 +7,7 @@ public class Vehicle {
     private String model;
     private String brand;
     private String colour;
-
+    private boolean available;
 
     public Vehicle(String numberPlate, double price, int capacity, String model, String brand, String colour){
         this.numberPlate = numberPlate;
@@ -16,6 +16,7 @@ public class Vehicle {
         this.model=model;
         this.brand=brand;
         this.colour=colour;
+        available=true;
     }
 
     public Vehicle() {
@@ -56,4 +57,8 @@ public class Vehicle {
     public String getColour() { return colour; }
 
     public void setColour(String colour) { this.colour = colour; }
+
+    public boolean getAvailable() { return available; }
+
+    public void setAvailable(boolean available) { this.available = available; }
 }

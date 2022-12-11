@@ -21,15 +21,8 @@ public class VehicleHandlerService {
 
     // public Vehicle getVehiclebyNumberPlate(String numberPlate) {
 
-    //  public List<Vehicle> getVehicleByCapacity(int capacity, RequestType requestType){
-
-    // public List<Vehicle> getVehicleByPrice(double price, RequestType requestType){
-
     // public List<Vehicle> getVehicleByColour(String colour, RequestType requestType){
 
-    // public List<Vehicle> getVehicleByBrand(String brand, RequestType requestType){
-
-    // public List<Vehicle> getVehicleByModel(String model, RequestType requestType){
 
     // public boolean updateVehicle(UpdateVehicleRequest request){
 
