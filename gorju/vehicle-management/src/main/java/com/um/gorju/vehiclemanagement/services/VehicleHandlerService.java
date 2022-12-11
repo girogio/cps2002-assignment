@@ -1,11 +1,11 @@
 package com.um.gorju.vehiclemanagement.services;
 
-import com.um.gorju.vehiclemanagement.data.entities.VehicleEntity;
-import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
-import org.hibernate.type.descriptor.sql.JdbcTypeFamilyInformation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.um.gorju.vehiclemanagement.data.entities.VehicleEntity;
+import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
 
 @Service
 public class VehicleHandlerService {
