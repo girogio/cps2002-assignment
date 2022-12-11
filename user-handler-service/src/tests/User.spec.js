@@ -12,9 +12,8 @@ const sandbox = sinon.createSandbox();
 // importing database models and controllers
 const mongoose = require("mongoose");
 let userController = rewire("../controllers/userController.js");
+// const userController =    require("../controllers/userController.js");
 const User = require("../models/userModel.js");
-const { findByIdAndDelete } = require("../models/userModel.js");
-
 
 describe("Testing the user controller", () => {
   let sampleUser;
@@ -24,7 +23,7 @@ describe("Testing the user controller", () => {
       name: "John Doe",
       email: "john@doe.com",
       id: "1234"
-    };
+    }
 
     // stub the findById method of the User model (returns sampleUser)
     findByIdStub = sandbox
@@ -179,6 +178,7 @@ describe("Testing the user controller", () => {
         expect(findByIdAndDeleteStub).to.have.been.calledOnce;
         done();
       })
+
     });
 
     it("it should reject if id is undefined", (done) => {
@@ -201,6 +201,26 @@ describe("Testing the user controller", () => {
     })
   })
 
+  describe("Testing the updateUserById function", () => {
+
+    it("it should resolve and update a user by id", async (done) => {
+
+      editedUser = {
+        name: "John Dozer",
+        email: "john@dozer.com"
+      }
+
+      // stub the save method 
+      saveStub = sandbox
+        .stub(mongoose.Model.prototype, "save")
+        .resolves();
+
+      const a = await userController.findByIdAndUpdate("1234", editedUser)
+      console.log(a)
+
+      done()
+    })
+  })
 });
 
 describe("Testing user model", () => {
@@ -229,3 +249,4 @@ describe("Testing user model", () => {
     });
   });
 });
+
