@@ -9,8 +9,8 @@ const userController = require("../controllers/userController.js");
 router.post("/", (req, res) => {
   userController
     .createUser(req.body)
-    .then(() => {
-      res.status(201).send("User created.");
+    .then((id) => {
+      res.status(201).json({ id });
     })
     .catch((error) => {
       console.log(error)
@@ -44,19 +44,19 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// // Update a user by id
-// router.patch('/:id', (req, res) => {
-//   User.findByIdAndUpdate(req.params.id, req.body).then(() => {
-//     res.status(200).send('User updated.')
-//   }).catch((error) => {
-//     res.status(400).send(error)
-//   })
-// })
+// Update a user by id
+router.patch('/:id', (req, res) => {
+  userController.findByIdAndUpdate(req.params.id, req.body).then(() => {
+    res.status(200).json({ success: true, message: 'User updated.' })
+  }).catch((error) => {
+    res.status(400).send(error)
+  })
+})
 
 // Delete a user by id
 router.delete('/:id', (req, res) => {
   userController.deleteUserById(req.params.id).then(() => {
-    res.status(200).send('User deleted.')
+    res.status(200).json({ success: true, message: 'User deleted.' })
   }).catch((error) => {
     res.status(400).send(error)
   })
@@ -67,7 +67,7 @@ router.delete("/", (req, res) => {
   userController
     .deleteAllUsers()
     .then(() => {
-      res.status(200).send("All users deleted.");
+      res.status(200).json({ success: true, message: "All users deleted." });
     })
     .catch((error) => {
       res.status(400).send(error);
