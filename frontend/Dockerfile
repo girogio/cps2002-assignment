@@ -1,9 +1,9 @@
 FROM python:3.7
 
-WORKDIR /app
+WORKDIR /app/frontend
 
-COPY . /app
+COPY . /app/frontend
 
-RUN pip install -r requirements.txt
+RUN pip install requests
 
 CMD ["python", "main.py"]
