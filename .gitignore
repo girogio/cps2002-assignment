@@ -1,2 +1,4 @@
-user-handler/node_modules/*
-user-handler/yarn.lock
+gorju-frontend-service/build/demo/faces/female/2.jpg
+*.png
+*.jpg
+__pycache__/
