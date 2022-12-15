@@ -61,4 +61,12 @@ public class Vehicle {
     public boolean getAvailable() { return available; }
 
     public void setAvailable(boolean available) { this.available = available; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return Double.compare(vehicle.price, price) == 0 && capacity == vehicle.capacity && numberPlate.equals(vehicle.numberPlate) && model.equals(vehicle.model) && colour.equals(vehicle.colour);
+    }
 }
