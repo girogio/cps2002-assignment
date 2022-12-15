@@ -125,7 +125,27 @@ public class VehicleHandlerService {
         return vehicles;
     }
 
-    //public boolean updateVehicle(UpdateVehicleRequest request){
+    /*public List<String> getVehicleInfo(String numberPlate){
+        List<String> information=null;
+        if(repository.existsById(numberPlate)){
+            information.add(mapper.map(repository.getById(numberPlate), Vehicle.class).getNumberPlate());
+            information.add(mapper.map(repository.getById(numberPlate), Vehicle.class).getColour());
+            information.add(mapper.map(repository.getById(numberPlate), Vehicle.class).getBrand());
+            information.add(mapper.map(repository.getById(numberPlate), Vehicle.class).getModel());
+            return information;
+        }
+        return null;
+    }
 
+    *
+     */
+
+    /*public boolean updateVehicle(UpdateVehicleRequest request){
+     if(repository.existsById(request.getNumberPlate())){
+        repository.save(mapper.map(request, VehicleEntity.class));
+        return true;
+    }
+        return false;
+    }*/
 
 }
