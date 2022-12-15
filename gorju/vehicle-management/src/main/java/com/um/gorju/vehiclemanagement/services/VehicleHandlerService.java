@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import com.um.gorju.vehiclemanagement.data.entities.VehicleEntity;
 import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 @Service
 public class VehicleHandlerService {
     @Autowired
@@ -60,21 +64,68 @@ public class VehicleHandlerService {
        return true;
    }
 
-
-
-
-    public Vehicle getVehiclebyNumberPlate(String numberPlate) {
+    public Vehicle getVehicleByNumberPlate(String numberPlate) {
         if(repository.existsById(numberPlate)){
             return mapper.map(repository.getById(numberPlate), Vehicle.class);
         }
         return null;
     }
 
-    // public List<Vehicle> getVehicleByColour(String colour, RequestType requestType){
+    public List<Vehicle> getVehicleByColour(String colour){
+        List<VehicleEntity> vehicleEntityList = repository.findAll();
+        Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
+        List<Vehicle> matchingVehicles = new ArrayList<>();
 
-    // public List<Vehicle> getAvailableCars(){
+        while(iterator.hasNext()){
+            VehicleEntity vehicleEntity = iterator.next();
+            if(vehicleEntity.getColour().equals(colour)){
+                matchingVehicles.add(mapper.map(vehicleEntity, Vehicle.class));
+            }
+        }
+        return matchingVehicles;
+    }
 
-    // public boolean updateVehicle(UpdateVehicleRequest request){
+    public List<Vehicle> getAvailableVehicles() {
+        List<VehicleEntity> vehicleEntityList = repository.findAll();
+        Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
+        List<Vehicle> matchingVehicles = new ArrayList<>();
+
+        while(iterator.hasNext()){
+            VehicleEntity vehicleEntity = iterator.next();
+            if(vehicleEntity.getAvailable()){
+                matchingVehicles.add(mapper.map(vehicleEntity, Vehicle.class));
+            }
+        }
+        return matchingVehicles;
+    }
+
+    public List<Vehicle> getUnavailableVehicles() {
+        List<VehicleEntity> vehicleEntityList = repository.findAll();
+        Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
+        List<Vehicle> matchingVehicles = new ArrayList<>();
+
+        while(iterator.hasNext()){
+            VehicleEntity vehicleEntity = iterator.next();
+            if(!vehicleEntity.getAvailable()){
+                matchingVehicles.add(mapper.map(vehicleEntity, Vehicle.class));
+            }
+        }
+        return matchingVehicles;
+    }
+
+    public List<Vehicle> getAllVehicles(){
+        List<VehicleEntity> vehicleEntityList = repository.findAll();
+        Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
+        List<Vehicle> vehicles = new ArrayList<>();
+
+        while(iterator.hasNext()){
+            VehicleEntity vehicleEntity = iterator.next();
+            vehicles.add(mapper.map(vehicleEntity, Vehicle.class));
+        }
+        return vehicles;
+    }
+
+    //public boolean updateVehicle(UpdateVehicleRequest request){
 
 
 }
