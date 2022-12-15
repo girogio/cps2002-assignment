@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -84,7 +89,7 @@ public class VehicleManagementServiceTests {
     }
 
     @Test
-    public void deleteExistingVehicletest(){
+    public void testDeleteExistingVehicle(){
         String numberPlate = "ABC123";
         //existsById returns true meaning vehicle exists in repository
         when(repository.existsById(any(String.class))).thenReturn(true);
@@ -103,6 +108,26 @@ public class VehicleManagementServiceTests {
 
         // Teardown -- no teardown needed
 
+    }
+
+    @Test
+    public void testGetExistingVehiclebyNumberPlate(){
+        // Setup
+        String numberPlate = "SEF657";
+        Vehicle expectedResponse = new Vehicle(numberPlate, 200, 10, "Captur", "Renault", "Cream");
+        VehicleEntity expectedEntityResponse = modelMapper.map(expectedResponse, VehicleEntity.class);
+        when(repository.existsById(numberPlate)).thenReturn(true);
+        when(repository.getById(numberPlate)).thenReturn(expectedEntityResponse);
+
+        // Exercise
+        Vehicle response = vehicleHandlerService.getVehiclebyNumberPlate(numberPlate);
+
+        // Verify
+        assertTrue(expectedResponse.equals(response));
+        verify(repository, times(1)).existsById(numberPlate);
+        verify(repository, times(1)).getById(numberPlate);
+
+        // Teardown -- no teardown needed
     }
 }
 

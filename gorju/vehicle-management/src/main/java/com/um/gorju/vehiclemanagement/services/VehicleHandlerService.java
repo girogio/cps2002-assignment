@@ -61,9 +61,14 @@ public class VehicleHandlerService {
    }
 
 
-   }
 
-    // public Vehicle getVehiclebyNumberPlate(String numberPlate) {
+
+    public Vehicle getVehiclebyNumberPlate(String numberPlate) {
+        if(repository.existsById(numberPlate)){
+            return mapper.map(repository.getById(numberPlate), Vehicle.class);
+        }
+        return null;
+    }
 
     // public List<Vehicle> getVehicleByColour(String colour, RequestType requestType){
 
@@ -72,3 +77,4 @@ public class VehicleHandlerService {
     // public boolean updateVehicle(UpdateVehicleRequest request){
 
 
+}
