@@ -19,6 +19,16 @@ public class Vehicle {
         available=true;
     }
 
+    public Vehicle(String numberPlate, double price, int capacity, String model, String brand, String colour, boolean available){
+        this.numberPlate = numberPlate;
+        this.price = price;
+        this.capacity = capacity;
+        this.model=model;
+        this.brand=brand;
+        this.colour=colour;
+        this.available=available;
+    }
+
     public Vehicle() {
     }
 
