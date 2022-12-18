@@ -1,23 +1,24 @@
 package com.um.gorju.vehiclemanagement.web.controllers;
 
+import com.cedarsoftware.util.DeepEquals;
+import com.um.gorju.vehiclemanagement.data.entities.VehicleEntity;
 import com.um.gorju.vehiclemanagement.services.*;
-import com.um.gorju.vehiclemanagement.web.controllers.requests.AddCommercialRequest;
-import com.um.gorju.vehiclemanagement.web.controllers.requests.AddFamilyCarRequest;
-import com.um.gorju.vehiclemanagement.web.controllers.requests.AddMotorcycleRequest;
-import com.um.gorju.vehiclemanagement.web.controllers.requests.DeleteVehicleRequest;
-import com.um.gorju.vehiclemanagement.web.controllers.responses.AddCommercialResponse;
-import com.um.gorju.vehiclemanagement.web.controllers.responses.AddFamilyCarResponse;
-import com.um.gorju.vehiclemanagement.web.controllers.responses.AddMotorcycleResponse;
-import com.um.gorju.vehiclemanagement.web.controllers.responses.DeleteVehicleResponse;
+import com.um.gorju.vehiclemanagement.web.controllers.requests.*;
+import com.um.gorju.vehiclemanagement.web.controllers.responses.*;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.server.ResponseStatusException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.apache.logging.log4j.message.ParameterizedMessage.deepToString;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -32,6 +33,7 @@ public class VehicleManagementControllerTests {
     @MockBean
     VehicleHandlerService vehicleManagementServiceMock;
 
+    /*
     @Test
     public void testAddCommercialVehicle(){
         // Setup
@@ -88,15 +90,99 @@ public class VehicleManagementControllerTests {
         verify(vehicleManagementServiceMock, times(1)).addMotorcycle(any(Motorcycle.class));
         // Teardown - no teardown stage
     }
+    */
+
+
+    @Test
+    public void testCreateFamilyCar(){
+        // Setup
+        String type = "family";
+        CreateVehicleRequest request =
+                new CreateVehicleRequest("ABC123","Captur", "Renault", "White", "family");
+        boolean expectedEntered = true;
+        when(vehicleManagementServiceMock.addVehicle(any(Vehicle.class))).thenReturn(expectedEntered);
+
+        // Exercise
+        CreateVehicleResponse actualResponse = vehicleHandlerController.createVehicle(request, type);
+
+        // Verify
+        assertNotNull(actualResponse, "Response is null.");
+        assertEquals(expectedEntered, actualResponse.isEntered());
+
+        verify(vehicleManagementServiceMock, times(1)).addVehicle(any(Vehicle.class));
+        // Teardown - no teardown stage
+    }
+    @Test
+    public void testCreateCommercial(){
+        // Setup
+        String type = "commercial";
+        CreateVehicleRequest request =
+                new CreateVehicleRequest("ABC123","Captur", "Renault", "White", "commercial");
+        boolean expectedEntered = true;
+        when(vehicleManagementServiceMock.addVehicle(any(Vehicle.class))).thenReturn(expectedEntered);
+
+        // Exercise
+        CreateVehicleResponse actualResponse = vehicleHandlerController.createVehicle(request, type);
+
+        // Verify
+        assertNotNull(actualResponse, "Response is null.");
+        assertEquals(expectedEntered, actualResponse.isEntered());
+
+        verify(vehicleManagementServiceMock, times(1)).addVehicle(any(Vehicle.class));
+        // Teardown - no teardown stage
+    }
+
+    @Test
+    public void testCreateMotorcycle(){
+        // Setup
+        String type = "motorcycle";
+        CreateVehicleRequest request =
+                new CreateVehicleRequest("ABC123","Captur", "Renault", "White", "motorcycle");
+        boolean expectedEntered = true;
+        when(vehicleManagementServiceMock.addVehicle(any(Vehicle.class))).thenReturn(expectedEntered);
+
+        // Exercise
+        CreateVehicleResponse actualResponse = vehicleHandlerController.createVehicle(request, type);
+
+        // Verify
+        assertNotNull(actualResponse, "Response is null.");
+        assertEquals(expectedEntered, actualResponse.isEntered());
+
+        verify(vehicleManagementServiceMock, times(1)).addVehicle(any(Vehicle.class));
+        // Teardown - no teardown stage
+    }
+
+    @Test
+    public void testCreateVehicleOfInvalidType(){
+        String type = "bus";
+        boolean caught = false;
+        CreateVehicleRequest request =
+                new CreateVehicleRequest("ABC123","City", "Mercedes", "Gray", "bus");
+        boolean expectedEntered = true;
+        when(vehicleManagementServiceMock.addVehicle(any(Vehicle.class))).thenReturn(expectedEntered);
+
+
+        //Exercise
+        try{
+            CreateVehicleResponse actualResponse = vehicleHandlerController.createVehicle(request, type);
+        }catch(Exception e){
+            caught = true;
+        }
+
+        //Verify
+        assertTrue(caught);
+        assertThrows(ResponseStatusException.class, () ->  vehicleHandlerController.createVehicle(request,type));
+
+    }
 
     @Test
     public void testDeleteExistingVehicle(){
         // Setup
         String numberPlate = "ABC123";
-        AddMotorcycleRequest addRequest = new AddMotorcycleRequest("ABC123", "Captur", "Renault", "White");
-        vehicleHandlerController.addMotorcycle(addRequest);
-        DeleteVehicleRequest deleteRequest =
-                new DeleteVehicleRequest(numberPlate);
+        CreateVehicleRequest createRequest = new CreateVehicleRequest("ABC123", "Captur", "Renault", "White", "family");
+        vehicleHandlerController.createVehicle(createRequest, "family");
+
+        DeleteVehicleRequest deleteRequest = new DeleteVehicleRequest(numberPlate);
         boolean expectedFound = true;
         when(vehicleManagementServiceMock.deleteVehicle(numberPlate)).thenReturn(expectedFound);
 
@@ -128,4 +214,23 @@ public class VehicleManagementControllerTests {
         verify(vehicleManagementServiceMock, times(1)).deleteVehicle(numberPlate);
         // Teardown - no teardown stage
     }
+
+    /*@Test
+    public void testGetAllVehicles(){
+        //Setup
+        List<Vehicle> returnedVehicleList= new ArrayList<>();
+        returnedVehicleList.add(new Vehicle("JUK987", 200, 10, "Captur", "Renault", "White"));
+        returnedVehicleList.add(new Vehicle("JIK984", 200, 10, "Clio", "Renault", "Red"));
+        GetVehicleResponse expectedResponse = new GetVehicleResponse(returnedVehicleList);
+        //when(vehicleManagementServiceMock.getVehicles().thenReturn(returnedVehicleList));
+
+        // Exercise
+        GetVehicleResponse response = vehicleHandlerController.getAllVehicles(null, null);
+
+        // Verify
+        assertNotNull(response);
+        assertTrue(DeepEquals.deepEquals(expectedResponse.vehicles, response));
+        verify(vehicleManagementServiceMock, times(1)).getVehicles(null, null);
+
+    }*/
 }
