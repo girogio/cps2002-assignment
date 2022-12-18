@@ -302,7 +302,7 @@ public class VehicleManagementControllerTests {
 
         //Verify
         assertTrue(DeepEquals.deepEquals(response.vehicles.get(0), returnedVehicle));
-        verify(vehicleManagementServiceMock, times(1)).getVehicleByNumberPlate(numberPlate);
+        verify(vehicleManagementServiceMock, times(2)).getVehicleByNumberPlate(numberPlate);
 
     }
 
