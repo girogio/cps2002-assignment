@@ -1,19 +1,18 @@
 package com.um.gorju.vehiclemanagement.web.controllers;
 
+import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
 import com.um.gorju.vehiclemanagement.services.*;
-import com.um.gorju.vehiclemanagement.web.controllers.requests.AddCommercialRequest;
-import com.um.gorju.vehiclemanagement.web.controllers.requests.AddFamilyCarRequest;
-import com.um.gorju.vehiclemanagement.web.controllers.requests.AddMotorcycleRequest;
-import com.um.gorju.vehiclemanagement.web.controllers.requests.DeleteVehicleRequest;
-import com.um.gorju.vehiclemanagement.web.controllers.responses.AddCommercialResponse;
-import com.um.gorju.vehiclemanagement.web.controllers.responses.AddFamilyCarResponse;
-import com.um.gorju.vehiclemanagement.web.controllers.responses.AddMotorcycleResponse;
-import com.um.gorju.vehiclemanagement.web.controllers.responses.DeleteVehicleResponse;
+import com.um.gorju.vehiclemanagement.web.controllers.requests.*;
+import com.um.gorju.vehiclemanagement.web.controllers.responses.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class VehicleHandlerController {
@@ -23,6 +22,7 @@ public class VehicleHandlerController {
     @Autowired
     ModelMapper mapper;
 
+    /*
     //Create family car, motorcycle, commercial
     @PostMapping(value = "familycar", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -45,24 +45,59 @@ public class VehicleHandlerController {
         return new AddMotorcycleResponse(vehicleHandlerService.addMotorcycle(motorcycle));
     }
 
+     */
+
+    // Create a vehicle
+    // add vehicle post request
+    @PostMapping(value = "vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public CreateVehicleResponse createVehicle(@RequestBody CreateVehicleRequest request, @RequestParam String type){
+        Vehicle v;
+        switch(type){
+            case "family":
+                v = mapper.map(request, FamilyCar.class);
+                break;
+            case "commercial":
+                v = mapper.map(request, CommercialVehicle.class);
+                break;
+            case "motorcycle":
+                v = mapper.map(request, Motorcycle.class);
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid vehicle type.");
+        }
+        return new CreateVehicleResponse(vehicleHandlerService.addVehicle(v));
+    }
+
+    /*
+    //update a vehicle
+    @PutMapping(value="vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void updateVehicle(@RequestBody UpdateVehicleRequest request){
+        Vehicle v = mapper.map(request, Vehicle.class);
+        vehicleHandlerService.updateVehicle(v);
+    }
+
+    // get all vehicles
+    @GetMapping(value = "vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public GetVehicleResponse getAllVehicles(@RequestParam(required = false) String colour,  @RequestParam( required = false) String isAvailable){
+        return new GetVehicleResponse(vehicleHandlerService.getVehicles(colour, isAvailable));
+    }
+
+    @GetMapping(value = "vehicles/{numberPlate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public GetVehicleResponse getVehicleByNumberPlate(@PathVariable String numberPlate){
+        List<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(vehicleHandlerService.getVehicleByNumberPlate(numberPlate));
+        return new GetVehicleResponse(vehicles);
+    }
+    */
+
     // Delete vehicle
     @DeleteMapping(value = "vehicles/{numberPlate}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public DeleteVehicleResponse deleteVehicle(@RequestBody DeleteVehicleRequest request){
         return new DeleteVehicleResponse(vehicleHandlerService.deleteVehicle(request.getNumberPlate()));
     }
-
-    // Get vehicle by number plate
-
-    // Get vehicle by colour
-
-    // Get all vehicles
-
-    // Get available vehicles
-
-    // Get unavailable vehicles
-
-    //Update a vehicle
-
-
 }
