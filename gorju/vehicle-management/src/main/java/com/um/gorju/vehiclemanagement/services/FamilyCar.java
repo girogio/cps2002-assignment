@@ -5,5 +5,8 @@ public class FamilyCar extends Vehicle{
         super(numberPlate, 50, 5, model, brand, colour);
     }
 
-    public FamilyCar(){}
+    public FamilyCar(){
+        this.setCapacity(5);
+        this.setPrice(50);
+    }
 }

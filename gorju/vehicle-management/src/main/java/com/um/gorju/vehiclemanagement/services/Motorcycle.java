@@ -5,5 +5,8 @@ public class Motorcycle extends Vehicle{
         super(numberPlate, 20, 2, model, brand, colour);
     }
 
-    public Motorcycle(){}
+    public Motorcycle(){
+        this.setCapacity(2);
+        this.setPrice(20);
+    }
 }
