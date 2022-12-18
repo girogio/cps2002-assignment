@@ -4,7 +4,7 @@ import java.util.List;
 import com.um.gorju.vehiclemanagement.services.Vehicle;
 
 public class GetVehicleResponse {
-    List<Vehicle> vehicles;
+    public List<Vehicle> vehicles;
 
     public GetVehicleResponse() {
     }
