@@ -1,11 +1,14 @@
 package com.um.gorju.vehiclemanagement.services;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.um.gorju.vehiclemanagement.data.entities.VehicleEntity;
 import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -56,6 +59,17 @@ public class VehicleHandlerService {
         }
     }
 
+    public boolean addVehicle(Vehicle v) {
+        VehicleEntity vehicleEntity = mapper.map(v, VehicleEntity.class);
+        boolean exists = repository.existsById(vehicleEntity.getNumberPlate());
+        if (exists) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle with same number plate already exists.");
+        }
+
+        repository.save(vehicleEntity);
+        return true;
+    }
+
 
    public boolean deleteVehicle(String numberPlate) {
        if(!repository.existsById(numberPlate))
@@ -65,8 +79,9 @@ public class VehicleHandlerService {
    }
 
     public Vehicle getVehicleByNumberPlate(String numberPlate) {
+        Assert.notNull(repository, "NumberPlate must not be null");
         if(repository.existsById(numberPlate)){
-            return mapper.map(repository.getById(numberPlate), Vehicle.class);
+            return mapper.map(repository.findByNumberPlate(numberPlate), Vehicle.class);
         }
         return null;
     }
@@ -113,7 +128,7 @@ public class VehicleHandlerService {
         return matchingVehicles;
     }
 
-    public List<Vehicle> getAllVehicles(){
+    public List<Vehicle> getVehicles(){
         List<VehicleEntity> vehicleEntityList = repository.findAll();
         Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
         List<Vehicle> vehicles = new ArrayList<>();
@@ -125,20 +140,50 @@ public class VehicleHandlerService {
         return vehicles;
     }
 
-    /*public List<String> getVehicleInfo(String numberPlate){
-        List<String> information=null;
-        if(repository.existsById(numberPlate)){
-            information.add(mapper.map(repository.getById(numberPlate), Vehicle.class).getNumberPlate());
-            information.add(mapper.map(repository.getById(numberPlate), Vehicle.class).getColour());
-            information.add(mapper.map(repository.getById(numberPlate), Vehicle.class).getBrand());
-            information.add(mapper.map(repository.getById(numberPlate), Vehicle.class).getModel());
-            return information;
+    public List<Vehicle> getVehicles(String colour, String isAvailable){
+        if(colour == null && isAvailable == null){
+            return getVehicles();
+        }else if(colour == null){
+            return isAvailable.equals("true") ? getAvailableVehicles() : isAvailable.equals("false") ? getUnavailableVehicles() : null;
+        }else if(isAvailable == null){
+            return getVehicleByColour(colour);
+        }else{
+            List<Vehicle> vehicles = getVehicleByColour(colour);
+            Iterator<Vehicle> iterator = vehicles.listIterator();
+            List<Vehicle> matchingVehicles = new ArrayList<>();
+
+            while(iterator.hasNext()){
+                Vehicle vehicle = iterator.next();
+                if(vehicle.getAvailable() == Boolean.parseBoolean(isAvailable)){
+                    matchingVehicles.add(vehicle);
+                }
+            }
+            return matchingVehicles;
         }
-        return null;
     }
 
-    *
-     */
+    public void updateVehicle(Vehicle v) {
+        // empty properties
+
+        // empty price
+
+        //input plate -> {
+        //  "vehicles": [
+        //    {
+        //      "numberPlate": "",
+        //      "price": "",
+        //      "capacity": "",
+        //      "model": "Mazda",
+        //      "brand": "",
+        //      "colour": "",
+        //      "available": ""
+        //    }
+        //  ]
+        //}
+
+    }
+
+
 
     /*public boolean updateVehicle(UpdateVehicleRequest request){
      if(repository.existsById(request.getNumberPlate())){
