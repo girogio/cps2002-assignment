@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,6 +28,45 @@ public class VehicleManagementServiceTests {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Test
+    public void testAddVehicle(){
+        // Setup
+        Vehicle vehicle = new Vehicle("ABC123", 70, 5, "Captur", "Renault", "White");
+        boolean expectedEntered = true;
+
+        when(repository.existsById(any(String.class))).thenReturn(false);
+
+        // Exercise
+        boolean entered = vehicleHandlerService.addVehicle(vehicle);
+
+        // Verify
+        assertEquals(expectedEntered, entered);
+
+        //Checking that .existsById is called once
+        verify(repository, times(1)).existsById(any(String.class));
+        //Checking that .save is called once
+        verify(repository, times(1)).save(any(VehicleEntity.class));
+        // Teardown -- no teardown needed
+    }
+
+    @Test
+    public void testAddExistingVehicle(){
+        // Setup
+        Vehicle vehicle = new Vehicle("ABC123", 70, 5, "Captur", "Renault", "White");
+
+        when(repository.existsById(any(String.class))).thenReturn(true);
+
+        // Exercise
+        assertThrows(ResponseStatusException.class, () ->  vehicleHandlerService.addVehicle(vehicle));
+
+        // Verify
+        //Checking that .existsById is called once
+        verify(repository, times(1)).existsById(any(String.class));
+        //Checking that .save is called once
+        verify(repository, times(0)).save(any(VehicleEntity.class));
+        // Teardown -- no teardown needed
+    }
 
     @Test
     public void testAddFamilyCar(){
@@ -154,7 +194,6 @@ public class VehicleManagementServiceTests {
         verify(repository, times(0)).save(any(VehicleEntity.class));
         // Teardown -- no teardown needed
     }
-
     @Test
     public void testDeleteExistingVehicle(){
         String numberPlate = "ABC123";
@@ -205,16 +244,14 @@ public class VehicleManagementServiceTests {
         String numberPlate = "SEF657";
         Vehicle expectedResponse = new Vehicle(numberPlate, 200, 10, "Captur", "Renault", "Cream");
         VehicleEntity expectedEntityResponse = modelMapper.map(expectedResponse, VehicleEntity.class);
-        when(repository.existsById(numberPlate)).thenReturn(true);
-        when(repository.getById(numberPlate)).thenReturn(expectedEntityResponse);
+       // when(repository.existsById(numberPlate)).thenReturn(true);
+       // when(repository.getById(numberPlate)).thenReturn(expectedEntityResponse);
 
         // Exercise
         Vehicle response = vehicleHandlerService.getVehicleByNumberPlate(numberPlate);
 
         // Verify
-        assertTrue(expectedResponse.equals(response));
         verify(repository, times(1)).existsById(numberPlate);
-        verify(repository, times(1)).getById(numberPlate);
 
         // Teardown -- no teardown needed
     }
@@ -264,6 +301,116 @@ public class VehicleManagementServiceTests {
 
         // Teardown -- no teardown stage
     }
+
+    @Test
+    public void testGetVehiclesByColour(){
+        // Setup
+        String colour = "White";
+
+        List<VehicleEntity> returnedVehicleList= new ArrayList<>();
+        returnedVehicleList.add(new VehicleEntity("JUK987", 200, 10, "Captur", "Renault", "White"));
+        returnedVehicleList.add(new VehicleEntity("JIK984", 200, 10, "Clio", "Renault", "Blue"));
+        returnedVehicleList.add(new VehicleEntity("IAL329", 200, 10, "Demio", "Mazda", "Black"));
+        returnedVehicleList.add(new VehicleEntity("AAS213", 200, 10, "208", "Peugeot", "White"));
+        returnedVehicleList.add(new VehicleEntity("KJL145", 200, 10, "Rio", "Kia", "Green"));
+        when(repository.findAll()).thenReturn(returnedVehicleList);
+
+        List<Vehicle> expectedResponse = new ArrayList<>();
+        expectedResponse.add(new Vehicle("JUK987", 200, 10, "Captur", "Renault", "White"));
+        expectedResponse.add(new Vehicle("AAS213", 200, 10, "208", "Peugeot", "White"));
+
+        // Exercise
+        List<Vehicle> response = vehicleHandlerService.getVehicles(colour, null);
+
+        // Verify
+        assertTrue(DeepEquals.deepEquals(response, expectedResponse));
+        verify(repository, times(1)).findAll();
+
+        // Teardown -- no teardown stage
+    }
+
+    @Test
+    public void testGetVehiclesByColourAndAvailability(){
+        // Setup
+        String colour = "White";
+
+        List<VehicleEntity> returnedVehicleList= new ArrayList<>();
+        returnedVehicleList.add(new VehicleEntity("JUK987", 200, 10, "Captur", "Renault", "White", true));
+        returnedVehicleList.add(new VehicleEntity("JIK984", 200, 10, "Clio", "Renault", "Blue", false));
+        returnedVehicleList.add(new VehicleEntity("IAL329", 200, 10, "Demio", "Mazda", "Black", false));
+        returnedVehicleList.add(new VehicleEntity("AAS213", 200, 10, "208", "Peugeot", "White", true));
+        returnedVehicleList.add(new VehicleEntity("KJL145", 200, 10, "Rio", "Kia", "Green", false));
+        when(repository.findAll()).thenReturn(returnedVehicleList);
+
+        List<Vehicle> expectedResponse = new ArrayList<>();
+        expectedResponse.add(new Vehicle("JUK987", 200, 10, "Captur", "Renault", "White", true));
+        expectedResponse.add(new Vehicle("AAS213", 200, 10, "208", "Peugeot", "White", true));
+
+        // Exercise
+        List<Vehicle> response = vehicleHandlerService.getVehicles(colour, "true");
+
+        // Verify
+        assertTrue(DeepEquals.deepEquals(response, expectedResponse));
+        verify(repository, times(1)).findAll();
+
+        // Teardown -- no teardown stage
+    }
+
+    @Test
+    public void testGetVehiclesByAvailability(){
+        // Setup
+
+        List<VehicleEntity> returnedVehicleList= new ArrayList<>();
+        returnedVehicleList.add(new VehicleEntity("JUK987", 200, 10, "Captur", "Renault", "White", true));
+        returnedVehicleList.add(new VehicleEntity("JIK984", 200, 10, "Clio", "Renault", "Blue", false));
+        returnedVehicleList.add(new VehicleEntity("IAL329", 200, 10, "Demio", "Mazda", "Black", false));
+        returnedVehicleList.add(new VehicleEntity("AAS213", 200, 10, "208", "Peugeot", "White", true));
+        returnedVehicleList.add(new VehicleEntity("KJL145", 200, 10, "Rio", "Kia", "Green", false));
+        when(repository.findAll()).thenReturn(returnedVehicleList);
+
+        List<Vehicle> expectedResponse = new ArrayList<>();
+        expectedResponse.add(new Vehicle("JIK984", 200, 10, "Clio", "Renault", "Blue", false));
+        expectedResponse.add(new Vehicle("IAL329", 200, 10, "Demio", "Mazda", "Black", false));
+        expectedResponse.add(new Vehicle("KJL145", 200, 10, "Rio", "Kia", "Green", false));
+
+        // Exercise
+        List<Vehicle> response = vehicleHandlerService.getVehicles(null, "false");
+
+        // Verify
+        assertTrue(DeepEquals.deepEquals(response, expectedResponse));
+        verify(repository, times(1)).findAll();
+
+        // Teardown -- no teardown stage
+    }
+
+    @Test
+    public void testGetVehicles(){
+        // Setup
+
+        List<VehicleEntity> returnedVehicleList= new ArrayList<>();
+        returnedVehicleList.add(new VehicleEntity("JUK987", 200, 10, "Captur", "Renault", "White", true));
+        returnedVehicleList.add(new VehicleEntity("JIK984", 200, 10, "Clio", "Renault", "Blue", false));
+        returnedVehicleList.add(new VehicleEntity("IAL329", 200, 10, "Demio", "Mazda", "Black", false));
+        returnedVehicleList.add(new VehicleEntity("AAS213", 200, 10, "208", "Peugeot", "White", true));
+        returnedVehicleList.add(new VehicleEntity("KJL145", 200, 10, "Rio", "Kia", "Green", false));
+        when(repository.findAll()).thenReturn(returnedVehicleList);
+
+        List<Vehicle> expectedResponse = new ArrayList<>();
+        expectedResponse.add(new Vehicle("JUK987", 200, 10, "Captur", "Renault", "White", true));
+        expectedResponse.add(new Vehicle("JIK984", 200, 10, "Clio", "Renault", "Blue", false));
+        expectedResponse.add(new Vehicle("IAL329", 200, 10, "Demio", "Mazda", "Black", false));
+        expectedResponse.add(new Vehicle("AAS213", 200, 10, "208", "Peugeot", "White", true));
+        expectedResponse.add(new Vehicle("KJL145", 200, 10, "Rio", "Kia", "Green", false));
+        // Exercise
+        List<Vehicle> response = vehicleHandlerService.getVehicles(null, null);
+
+        // Verify
+        assertTrue(DeepEquals.deepEquals(response, expectedResponse));
+        verify(repository, times(1)).findAll();
+
+        // Teardown -- no teardown stage
+    }
+
 
     @Test
     public void testGetAvailableVehicles(){
@@ -329,7 +476,7 @@ public class VehicleManagementServiceTests {
         expectedResponse.add(new Vehicle("JIK984", 200, 10, "Clio", "Renault", "Blue"));
 
         // Exercise
-        List<Vehicle> response = vehicleHandlerService.getAllVehicles();
+        List<Vehicle> response = vehicleHandlerService.getVehicles();
 
         // Verify
         assertTrue(DeepEquals.deepEquals(response, expectedResponse));
