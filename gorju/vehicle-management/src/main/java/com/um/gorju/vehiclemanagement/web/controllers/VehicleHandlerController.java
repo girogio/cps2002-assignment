@@ -86,15 +86,16 @@ public class VehicleHandlerController {
         return new GetVehicleResponse(vehicleHandlerService.getVehicles(colour, isAvailable));
     }
 
-    /*
+
     @GetMapping(value = "vehicles/{numberPlate}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public GetVehicleResponse getVehicleByNumberPlate(@PathVariable String numberPlate){
         List<Vehicle> vehicles = new ArrayList<>();
+        if(vehicleHandlerService.getVehicleByNumberPlate(numberPlate) == null)throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Not Found");
         vehicles.add(vehicleHandlerService.getVehicleByNumberPlate(numberPlate));
         return new GetVehicleResponse(vehicles);
     }
-    */
+
 
     // Delete vehicle
     @DeleteMapping(value = "vehicles/{numberPlate}", produces = MediaType.APPLICATION_JSON_VALUE)

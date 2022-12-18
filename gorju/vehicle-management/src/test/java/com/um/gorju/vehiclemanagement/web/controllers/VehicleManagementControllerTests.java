@@ -232,4 +232,97 @@ public class VehicleManagementControllerTests {
         assertTrue(DeepEquals.deepEquals(expectedResponse, response));
         verify(vehicleManagementServiceMock, times(1)).getVehicles(null, null);
     }
+
+    @Test
+    public void testGetAllVehiclesByColour(){
+        //Setup
+        List<Vehicle> returnedVehicleList= new ArrayList<>();
+        returnedVehicleList.add(new Vehicle("JUK987", 200, 10, "Captur", "Renault", "White"));
+        returnedVehicleList.add(new Vehicle("JIK984", 200, 10, "Clio", "Renault", "Red"));
+        GetVehicleResponse expectedResponse = new GetVehicleResponse(returnedVehicleList);
+        when(vehicleManagementServiceMock.getVehicles("White", null)).thenReturn(returnedVehicleList);
+
+        // Exercise
+        GetVehicleResponse response = vehicleHandlerController.getAllVehicles("White", null);
+
+        // Verify
+        assertNotNull(response);
+        assertTrue(DeepEquals.deepEquals(expectedResponse, response));
+        verify(vehicleManagementServiceMock, times(1)).getVehicles("White", null);
+    }
+
+    @Test
+    public void testGetAllVehiclesByAvailability(){
+        //Setup
+        List<Vehicle> returnedVehicleList= new ArrayList<>();
+        returnedVehicleList.add(new Vehicle("JUK987", 200, 10, "Captur", "Renault", "White", true));
+        returnedVehicleList.add(new Vehicle("JIK984", 200, 10, "Clio", "Renault", "Red", false));
+        returnedVehicleList.add(new Vehicle("JIL984", 200, 10, "Clio", "Renault", "Blue", true));
+        GetVehicleResponse expectedResponse = new GetVehicleResponse(returnedVehicleList);
+        when(vehicleManagementServiceMock.getVehicles(null, "true")).thenReturn(returnedVehicleList);
+
+        // Exercise
+        GetVehicleResponse response = vehicleHandlerController.getAllVehicles(null, "true");
+
+        // Verify
+        assertNotNull(response);
+        assertTrue(DeepEquals.deepEquals(expectedResponse, response));
+        verify(vehicleManagementServiceMock, times(1)).getVehicles(null, "true");
+    }
+
+    @Test
+    public void testGetAllVehiclesByAvailabilityAndColour(){
+        //Setup
+        List<Vehicle> returnedVehicleList= new ArrayList<>();
+        returnedVehicleList.add(new Vehicle("JUK987", 200, 10, "Captur", "Renault", "White", true));
+        returnedVehicleList.add(new Vehicle("JIK984", 200, 10, "Clio", "Renault", "Red", false));
+        returnedVehicleList.add(new Vehicle("JIL984", 200, 10, "Clio", "Renault", "Blue", true));
+        GetVehicleResponse expectedResponse = new GetVehicleResponse(returnedVehicleList);
+        when(vehicleManagementServiceMock.getVehicles("White", "true")).thenReturn(returnedVehicleList);
+
+        // Exercise
+        GetVehicleResponse response = vehicleHandlerController.getAllVehicles("White", "true");
+
+        // Verify
+        assertNotNull(response);
+        assertTrue(DeepEquals.deepEquals(expectedResponse, response));
+        verify(vehicleManagementServiceMock, times(1)).getVehicles("White", "true");
+    }
+
+    @Test
+    public void testGetExistingVehicleByNumberPlate(){
+        //Setup
+        String numberPlate = "ABC123";
+        Vehicle returnedVehicle = new Vehicle(numberPlate, 120,12, "BMW", "X3","Green");
+        GetVehicleResponse expectedResponse = mapper.map(returnedVehicle, GetVehicleResponse.class);
+        when(vehicleManagementServiceMock.getVehicleByNumberPlate(numberPlate)).thenReturn(returnedVehicle);
+
+        // Exercise
+        GetVehicleResponse response = vehicleHandlerController.getVehicleByNumberPlate(numberPlate);
+
+        //Verify
+        assertTrue(DeepEquals.deepEquals(response.vehicles.get(0), returnedVehicle));
+        verify(vehicleManagementServiceMock, times(1)).getVehicleByNumberPlate(numberPlate);
+
+    }
+
+    @Test
+    public void testGetNonExistingVehicleByNumberPlate(){
+        //Setup
+        String numberPlate = "AER241";
+        when(vehicleManagementServiceMock.getVehicleByNumberPlate(numberPlate)).thenReturn(null);
+        boolean caughtException = false;
+
+        //Exercise
+        try{
+            GetVehicleResponse response = vehicleHandlerController.getVehicleByNumberPlate(numberPlate);
+        }catch(Exception e){
+            caughtException = true;
+        }
+
+        //Verify
+        assertTrue(caughtException);
+        verify(vehicleManagementServiceMock, times(1)).getVehicleByNumberPlate(numberPlate);
+
+    }
 }
