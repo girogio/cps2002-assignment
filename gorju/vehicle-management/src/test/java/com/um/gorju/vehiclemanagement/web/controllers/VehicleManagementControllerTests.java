@@ -325,4 +325,48 @@ public class VehicleManagementControllerTests {
         verify(vehicleManagementServiceMock, times(1)).getVehicleByNumberPlate(numberPlate);
 
     }
+
+    @Test
+    public void testUpdateExistingVehicle(){
+        // Setup
+        UpdateVehicleRequest request = new UpdateVehicleRequest("ABC123", 35,4,
+               "Mercedes", "A75", "Black");
+        when(vehicleManagementServiceMock.
+                updateVehicle(request)).thenReturn(true);
+
+        // Exercise
+        vehicleHandlerController.updateVehicle(request);
+
+        // Verify
+        verify(vehicleManagementServiceMock, times(1)).
+                updateVehicle(request);
+
+        // Teardown - no teardown stage
+    }
+
+    @Test
+    public void testUpdateNonExistingVehicle(){
+        // Setup
+        // Setup
+        UpdateVehicleRequest request = new UpdateVehicleRequest("ABC123", 35,4,
+                "Mercedes", "A75", "Black",true);
+        when(vehicleManagementServiceMock.
+                updateVehicle(request)).thenReturn(false);
+        boolean exceptionThrown = false;
+
+        // Exercise
+        try{
+            vehicleHandlerController.updateVehicle(request);
+        }catch(Exception e){
+            exceptionThrown=true;
+        }
+
+
+        // Verify
+        assertTrue(exceptionThrown);
+        verify(vehicleManagementServiceMock, times(1)).
+                updateVehicle(request);
+
+        // Teardown - no teardown stage
+    }
 }

@@ -1,5 +1,6 @@
 package com.um.gorju.vehiclemanagement.services;
 
+import com.um.gorju.vehiclemanagement.web.controllers.requests.UpdateVehicleRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,26 +163,14 @@ public class VehicleHandlerService {
         }
     }
 
-    public void updateVehicle(Vehicle v) {
-        // empty properties
+    public boolean updateVehicle(UpdateVehicleRequest request) {
+            if(repository.existsById(request.getNumberPlate())){
+                repository.save(mapper.map(request, VehicleEntity.class));
+                return true;
+            }
+            return false;
+        }
 
-        // empty price
-
-        //input plate -> {
-        //  "vehicles": [
-        //    {
-        //      "numberPlate": "",
-        //      "price": "",
-        //      "capacity": "",
-        //      "model": "Mazda",
-        //      "brand": "",
-        //      "colour": "",
-        //      "available": ""
-        //    }
-        //  ]
-        //}
-
-    }
 
 
 

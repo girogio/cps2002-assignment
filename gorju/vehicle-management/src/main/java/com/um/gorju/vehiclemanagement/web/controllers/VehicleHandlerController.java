@@ -69,15 +69,18 @@ public class VehicleHandlerController {
         return new CreateVehicleResponse(vehicleHandlerService.addVehicle(v));
     }
 
-    /*
+
     //update a vehicle
-    @PutMapping(value="vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
+    // Update a vehicle
+    // Method --> PUT
+    // Request --> UpdateVehicleRequest
+    // Response --> 204 (No Content)
+    @PutMapping(value = "vehicles", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVehicle(@RequestBody UpdateVehicleRequest request){
-        Vehicle v = mapper.map(request, Vehicle.class);
-        vehicleHandlerService.updateVehicle(v);
+        boolean found = vehicleHandlerService.updateVehicle(request);
+        if(!found) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Not Found");
     }
-    */
 
     // get all vehicles
     @GetMapping(value = "vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
