@@ -77,6 +77,7 @@ public class VehicleHandlerController {
         Vehicle v = mapper.map(request, Vehicle.class);
         vehicleHandlerService.updateVehicle(v);
     }
+    */
 
     // get all vehicles
     @GetMapping(value = "vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,6 +86,7 @@ public class VehicleHandlerController {
         return new GetVehicleResponse(vehicleHandlerService.getVehicles(colour, isAvailable));
     }
 
+    /*
     @GetMapping(value = "vehicles/{numberPlate}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public GetVehicleResponse getVehicleByNumberPlate(@PathVariable String numberPlate){

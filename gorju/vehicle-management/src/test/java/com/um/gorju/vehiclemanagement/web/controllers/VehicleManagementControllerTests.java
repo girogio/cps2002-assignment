@@ -215,22 +215,21 @@ public class VehicleManagementControllerTests {
         // Teardown - no teardown stage
     }
 
-    /*@Test
+    @Test
     public void testGetAllVehicles(){
         //Setup
         List<Vehicle> returnedVehicleList= new ArrayList<>();
         returnedVehicleList.add(new Vehicle("JUK987", 200, 10, "Captur", "Renault", "White"));
         returnedVehicleList.add(new Vehicle("JIK984", 200, 10, "Clio", "Renault", "Red"));
         GetVehicleResponse expectedResponse = new GetVehicleResponse(returnedVehicleList);
-        //when(vehicleManagementServiceMock.getVehicles().thenReturn(returnedVehicleList));
+        when(vehicleManagementServiceMock.getVehicles(null, null)).thenReturn(returnedVehicleList);
 
         // Exercise
         GetVehicleResponse response = vehicleHandlerController.getAllVehicles(null, null);
 
         // Verify
         assertNotNull(response);
-        assertTrue(DeepEquals.deepEquals(expectedResponse.vehicles, response));
+        assertTrue(DeepEquals.deepEquals(expectedResponse, response));
         verify(vehicleManagementServiceMock, times(1)).getVehicles(null, null);
-
-    }*/
+    }
 }
