@@ -164,11 +164,46 @@ public class VehicleHandlerService {
     }
 
     public boolean updateVehicle(UpdateVehicleRequest request) {
-            if(repository.existsById(request.getNumberPlate())){
+            /*if(repository.existsById(request.getNumberPlate())){
                 repository.save(mapper.map(request, VehicleEntity.class));
                 return true;
             }
             return false;
+             */
+
+            // edit each field of a vehicle only if they are not empty
+            if(!repository.existsById(request.getNumberPlate())){
+                return false;
+            }
+
+            VehicleEntity vehicleEntity = repository.findByNumberPlate(request.getNumberPlate());
+
+            if(request.getColour() != null){
+                vehicleEntity.setColour(request.getColour());
+            }
+
+            if(request.getAvailable() != vehicleEntity.getAvailable()){
+                vehicleEntity.setAvailable(request.getAvailable());
+            }
+
+            if(request.getPrice() != -1){
+                vehicleEntity.setPrice(request.getPrice());
+            }
+
+            if(request.getCapacity() != -1){
+                vehicleEntity.setCapacity(request.getCapacity());
+            }
+
+            if(request.getBrand() != null){
+                vehicleEntity.setBrand(request.getBrand());
+            }
+
+            if(request.getModel() != null){
+                vehicleEntity.setModel(request.getModel());
+            }
+            repository.save(mapper.map(request, VehicleEntity.class));
+            return true;
+        }
         }
 
 
@@ -182,4 +217,3 @@ public class VehicleHandlerService {
         return false;
     }*/
 
-}
