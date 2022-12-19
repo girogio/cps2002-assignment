@@ -245,13 +245,15 @@ public class VehicleManagementServiceTests {
         String numberPlate = "SEF657";
         Vehicle expectedResponse = new Vehicle(numberPlate, 200, 10, "Captur", "Renault", "Cream");
         VehicleEntity expectedEntityResponse = modelMapper.map(expectedResponse, VehicleEntity.class);
-       // when(repository.existsById(numberPlate)).thenReturn(true);
-       // when(repository.getById(numberPlate)).thenReturn(expectedEntityResponse);
+        when(repository.findByNumberPlate(numberPlate)).thenReturn(expectedEntityResponse);
+        when(repository.existsById(numberPlate)).thenReturn(true);
+        when(repository.getById(numberPlate)).thenReturn(expectedEntityResponse);
 
         // Exercise
         Vehicle response = vehicleHandlerService.getVehicleByNumberPlate(numberPlate);
 
         // Verify
+        assertTrue(expectedResponse.equals(response));
         verify(repository, times(1)).existsById(numberPlate);
 
         // Teardown -- no teardown needed

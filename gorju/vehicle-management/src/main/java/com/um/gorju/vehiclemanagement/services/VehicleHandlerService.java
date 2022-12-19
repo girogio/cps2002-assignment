@@ -82,7 +82,7 @@ public class VehicleHandlerService {
     public Vehicle getVehicleByNumberPlate(String numberPlate) {
         Assert.notNull(repository, "NumberPlate must not be null");
         if(repository.existsById(numberPlate)){
-            return mapper.map(repository.findByNumberPlate(numberPlate), Vehicle.class);
+            return mapper.map(repository.getById(numberPlate), Vehicle.class);
         }
         return null;
     }
