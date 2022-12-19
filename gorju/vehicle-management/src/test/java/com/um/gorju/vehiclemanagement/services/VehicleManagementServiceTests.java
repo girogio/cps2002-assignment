@@ -3,6 +3,7 @@ package com.um.gorju.vehiclemanagement.services;
 import com.cedarsoftware.util.DeepEquals;
 import com.um.gorju.vehiclemanagement.data.entities.VehicleEntity;
 import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
+import com.um.gorju.vehiclemanagement.web.controllers.requests.UpdateVehicleRequest;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -483,6 +484,46 @@ public class VehicleManagementServiceTests {
         verify(repository, times(1)).findAll();
 
         //No teardown required
+
+    }
+
+    @Test
+    public void testUpdateVehicle(){
+        // Setup
+        String numberPlate = "ABC123";
+        VehicleEntity v = new VehicleEntity("ABC123", 120,12, "BMW", "X3","Green", true);
+        UpdateVehicleRequest request = new UpdateVehicleRequest("ABC123", 120,12, "BMW", "X3","Green", false);
+        VehicleEntity new_v = new VehicleEntity("ABC123", 120,12, "BMW", "X3","Green", false);
+        when(repository.findByNumberPlate(numberPlate)).thenReturn(v);
+        when(repository.existsById(numberPlate)).thenReturn(true);
+
+        // Exercise
+        boolean found = vehicleHandlerService.updateVehicle(request);
+
+        // Verify
+        assertTrue(found);
+        assertFalse(DeepEquals.deepEquals(repository.getById(numberPlate),new_v));
+        verify(repository, times(1)).existsById(numberPlate);
+
+        // Teardown -- no teardown needed
+
+    }
+
+    @Test
+    public void testUpdateNonExistingVehicle(){
+        // Setup
+        String numberPlate = "ABC124";
+        UpdateVehicleRequest request = new UpdateVehicleRequest("ABC124", 120,12, "BMW", "X3","Green", true);
+        when(repository.existsById(numberPlate)).thenReturn(false);
+
+        // Exercise
+        boolean found = vehicleHandlerService.updateVehicle(request);
+
+        // Verify
+        assertFalse(found);
+        verify(repository, times(1)).existsById(numberPlate);
+
+        // Teardown -- no teardown needed
 
     }
 }

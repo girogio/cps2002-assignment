@@ -338,7 +338,7 @@ public class VehicleManagementControllerTests {
         vehicleHandlerController.updateVehicle(request);
 
         // Verify
-        verify(vehicleManagementServiceMock, times(1)).
+        verify(vehicleManagementServiceMock, times(2)).
                 updateVehicle(request);
 
         // Teardown - no teardown stage
