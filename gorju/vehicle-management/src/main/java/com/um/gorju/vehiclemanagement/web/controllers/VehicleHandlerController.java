@@ -74,12 +74,17 @@ public class VehicleHandlerController {
     // Update a vehicle
     // Method --> PUT
     // Request --> UpdateVehicleRequest
-    // Response --> 204 (No Content)
+    // Response --> 200 (ok)
     @PutMapping(value = "vehicles", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateVehicle(@RequestBody UpdateVehicleRequest request){
+    @ResponseStatus(HttpStatus.OK)
+    public UpdateVehicleResponse updateVehicle(@RequestBody UpdateVehicleRequest request){
         boolean found = vehicleHandlerService.updateVehicle(request);
-        if(!found) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Not Found");
+        if(!found){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Not Found");
+        }else{
+            return new UpdateVehicleResponse(vehicleHandlerService.updateVehicle(request));
+        }
+
     }
 
     // get all vehicles
