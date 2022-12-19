@@ -6,4 +6,5 @@
 gorju/*/target/
 *.jpg
 __pycache__/
+*.class
 

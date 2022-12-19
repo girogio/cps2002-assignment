@@ -1,6 +1,6 @@
-package com.um.gorju.vehiclemanagement.services;
+package com.um.gorju.vehiclemanagement.web.controllers.requests;
 
-public class Vehicle {
+public class UpdateVehicleRequest {
     private String numberPlate;
     private double price;
     private int capacity;
@@ -9,7 +9,7 @@ public class Vehicle {
     private String colour;
     private boolean available;
 
-    public Vehicle(String numberPlate, double price, int capacity, String model, String brand, String colour){
+    public UpdateVehicleRequest(String numberPlate, double price, int capacity, String model, String brand, String colour){
         this.numberPlate = numberPlate;
         this.price = price;
         this.capacity = capacity;
@@ -19,7 +19,7 @@ public class Vehicle {
         available=true;
     }
 
-    public Vehicle(String numberPlate, double price, int capacity, String model, String brand, String colour, boolean available){
+    public UpdateVehicleRequest(String numberPlate, double price, int capacity, String model, String brand, String colour, boolean available){
         this.numberPlate = numberPlate;
         this.price = price;
         this.capacity = capacity;
@@ -29,7 +29,7 @@ public class Vehicle {
         this.available=available;
     }
 
-    public Vehicle() {
+    public UpdateVehicleRequest() {
     }
 
     public String getNumberPlate() {
@@ -71,12 +71,4 @@ public class Vehicle {
     public boolean getAvailable() { return available; }
 
     public void setAvailable(boolean available) { this.available = available; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vehicle vehicle = (Vehicle) o;
-        return Double.compare(vehicle.price, price) == 0 && capacity == vehicle.capacity && numberPlate.equals(vehicle.numberPlate) && model.equals(vehicle.model) && colour.equals(vehicle.colour);
-    }
 }

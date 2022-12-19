@@ -17,6 +17,8 @@ public class VehicleEntity {
 
     private String colour;
 
+    private boolean available;
+
     public VehicleEntity(String numberPlate, double price, int capacity, String model, String brand, String colour) {
         this.numberPlate = numberPlate;
         this.price = price;
@@ -24,6 +26,17 @@ public class VehicleEntity {
         this.model=model;
         this.brand=brand;
         this.colour=colour;
+        available=true;
+    }
+
+    public VehicleEntity(String numberPlate, double price, int capacity, String model, String brand, String colour, boolean available) {
+        this.numberPlate = numberPlate;
+        this.price = price;
+        this.capacity = capacity;
+        this.model=model;
+        this.brand=brand;
+        this.colour=colour;
+        this.available=available;
     }
 
     public VehicleEntity() {
@@ -64,4 +77,8 @@ public class VehicleEntity {
     public String getColour() { return colour; }
 
     public void setColour(String colour) { this.colour = colour; }
+
+    public boolean getAvailable() { return available; }
+
+    public void setAvailable(boolean available) { this.available = available; }
 }

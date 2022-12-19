@@ -1,11 +1,19 @@
 package com.um.gorju.vehiclemanagement.services;
 
+import com.um.gorju.vehiclemanagement.web.controllers.requests.UpdateVehicleRequest;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.util.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import com.um.gorju.vehiclemanagement.data.entities.VehicleEntity;
 import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
-import org.hibernate.type.descriptor.sql.JdbcTypeFamilyInformation;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class VehicleHandlerService {
@@ -52,6 +60,17 @@ public class VehicleHandlerService {
         }
     }
 
+    public boolean addVehicle(Vehicle v) {
+        VehicleEntity vehicleEntity = mapper.map(v, VehicleEntity.class);
+        boolean exists = repository.existsById(vehicleEntity.getNumberPlate());
+        if (exists) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle with same number plate already exists.");
+        }
+
+        repository.save(vehicleEntity);
+        return true;
+    }
+
 
    public boolean deleteVehicle(String numberPlate) {
        if(!repository.existsById(numberPlate))
@@ -60,15 +79,141 @@ public class VehicleHandlerService {
        return true;
    }
 
+    public Vehicle getVehicleByNumberPlate(String numberPlate) {
+        Assert.notNull(repository, "NumberPlate must not be null");
+        if(repository.existsById(numberPlate)){
+            return mapper.map(repository.findByNumberPlate(numberPlate), Vehicle.class);
+        }
+        return null;
+    }
 
-   }
+    public List<Vehicle> getVehicleByColour(String colour){
+        List<VehicleEntity> vehicleEntityList = repository.findAll();
+        Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
+        List<Vehicle> matchingVehicles = new ArrayList<>();
 
-    // public Vehicle getVehiclebyNumberPlate(String numberPlate) {
+        while(iterator.hasNext()){
+            VehicleEntity vehicleEntity = iterator.next();
+            if(vehicleEntity.getColour().equals(colour)){
+                matchingVehicles.add(mapper.map(vehicleEntity, Vehicle.class));
+            }
+        }
+        return matchingVehicles;
+    }
 
-    // public List<Vehicle> getVehicleByColour(String colour, RequestType requestType){
+    public List<Vehicle> getAvailableVehicles() {
+        List<VehicleEntity> vehicleEntityList = repository.findAll();
+        Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
+        List<Vehicle> matchingVehicles = new ArrayList<>();
 
-    // public List<Vehicle> getAvailableCars(){
+        while(iterator.hasNext()){
+            VehicleEntity vehicleEntity = iterator.next();
+            if(vehicleEntity.getAvailable()){
+                matchingVehicles.add(mapper.map(vehicleEntity, Vehicle.class));
+            }
+        }
+        return matchingVehicles;
+    }
 
-    // public boolean updateVehicle(UpdateVehicleRequest request){
+    public List<Vehicle> getUnavailableVehicles() {
+        List<VehicleEntity> vehicleEntityList = repository.findAll();
+        Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
+        List<Vehicle> matchingVehicles = new ArrayList<>();
 
+        while(iterator.hasNext()){
+            VehicleEntity vehicleEntity = iterator.next();
+            if(!vehicleEntity.getAvailable()){
+                matchingVehicles.add(mapper.map(vehicleEntity, Vehicle.class));
+            }
+        }
+        return matchingVehicles;
+    }
+
+    public List<Vehicle> getVehicles(){
+        List<VehicleEntity> vehicleEntityList = repository.findAll();
+        Iterator<VehicleEntity> iterator = vehicleEntityList.listIterator();
+        List<Vehicle> vehicles = new ArrayList<>();
+
+        while(iterator.hasNext()){
+            VehicleEntity vehicleEntity = iterator.next();
+            vehicles.add(mapper.map(vehicleEntity, Vehicle.class));
+        }
+        return vehicles;
+    }
+
+    public List<Vehicle> getVehicles(String colour, String isAvailable){
+        if(colour == null && isAvailable == null){
+            return getVehicles();
+        }else if(colour == null){
+            return isAvailable.equals("true") ? getAvailableVehicles() : isAvailable.equals("false") ? getUnavailableVehicles() : null;
+        }else if(isAvailable == null){
+            return getVehicleByColour(colour);
+        }else{
+            List<Vehicle> vehicles = getVehicleByColour(colour);
+            Iterator<Vehicle> iterator = vehicles.listIterator();
+            List<Vehicle> matchingVehicles = new ArrayList<>();
+
+            while(iterator.hasNext()){
+                Vehicle vehicle = iterator.next();
+                if(vehicle.getAvailable() == Boolean.parseBoolean(isAvailable)){
+                    matchingVehicles.add(vehicle);
+                }
+            }
+            return matchingVehicles;
+        }
+    }
+
+    public boolean updateVehicle(UpdateVehicleRequest request) {
+            /*if(repository.existsById(request.getNumberPlate())){
+                repository.save(mapper.map(request, VehicleEntity.class));
+                return true;
+            }
+            return false;
+             */
+
+            // edit each field of a vehicle only if they are not empty
+            if(!repository.existsById(request.getNumberPlate())){
+                return false;
+            }
+
+            VehicleEntity vehicleEntity = repository.findByNumberPlate(request.getNumberPlate());
+
+            if(request.getColour() != null){
+                vehicleEntity.setColour(request.getColour());
+            }
+
+            if(request.getAvailable() != vehicleEntity.getAvailable()){
+                vehicleEntity.setAvailable(request.getAvailable());
+            }
+
+            if(request.getPrice() != -1){
+                vehicleEntity.setPrice(request.getPrice());
+            }
+
+            if(request.getCapacity() != -1){
+                vehicleEntity.setCapacity(request.getCapacity());
+            }
+
+            if(request.getBrand() != null){
+                vehicleEntity.setBrand(request.getBrand());
+            }
+
+            if(request.getModel() != null){
+                vehicleEntity.setModel(request.getModel());
+            }
+            repository.save(mapper.map(request, VehicleEntity.class));
+            return true;
+        }
+        }
+
+
+
+
+    /*public boolean updateVehicle(UpdateVehicleRequest request){
+     if(repository.existsById(request.getNumberPlate())){
+        repository.save(mapper.map(request, VehicleEntity.class));
+        return true;
+    }
+        return false;
+    }*/
 
