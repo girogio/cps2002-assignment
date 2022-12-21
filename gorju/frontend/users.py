@@ -1,7 +1,7 @@
 import requests
 from utils import wait
 
-user_api_url = 'http://user_app:3000/api/users/'
+user_api_url = 'http://localhost/services/users/'
 
 
 def print_user(user):
