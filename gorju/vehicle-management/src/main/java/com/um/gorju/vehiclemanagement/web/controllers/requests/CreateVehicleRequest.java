@@ -7,6 +7,14 @@ public class CreateVehicleRequest {
     private String colour;
     private boolean available;
 
+    public CreateVehicleRequest(String numberPlate, String model, String brand, String colour){
+        this.numberPlate = numberPlate;
+        this.model=model;
+        this.brand=brand;
+        this.colour=colour;
+        available=true;
+    }
+
     public CreateVehicleRequest(String numberPlate, String model, String brand, String colour, String type){
         this.numberPlate = numberPlate;
         this.model=model;
