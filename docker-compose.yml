@@ -6,31 +6,57 @@ services:
     tty: true
     stdin_open: true
     networks:
-      - user-network
+      - frontend
     depends_on:
       - user_app
-  # User microservice (Node.js and MongoDB)
+      - vehicleapp
+      - booking_app
+  proxy:
+    build: ./proxy
+    ports:
+      - "80:80"
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - frontend
+      - vehicleapp
+      - user_app
+      - booking_app
+  booking_app:
+    build: ./gorju/booking-management
+    environment:
+    - SERVICE_PORT=${SERVICE_PORT}
+    - DATABASE_URL=mongodb://mongodb:27017/gorju-cars
+    networks: 
+      - backend
+    depends_on:
+      - mongodb
   user_app:
     build: ./gorju/user-management
     environment:
-      - SERVICE_PORT=3000
-      - DATABASE_URL=mongodb://user-db:27017/gorju-cars
-    ports:
-      - "3000:3000"
+      - SERVICE_PORT=${SERVICE_PORT}
+      - DATABASE_URL=mongodb://mongodb:27017/gorju-cars
     networks:
-      - user-network
+      - backend
     depends_on:
-      - user-db
-  user-db:
+      - mongodb
+  vehicleapp:
+    build: ./gorju/vehicle-management
+    environment:
+      - SERVICE_PORT=${SERVICE_PORT}
+    networks:
+      - backend
+  mongodb:
     image: mongo:latest
     ports:
       - "27017:27017"
     networks:
-      - user-network
+      - backend
 
 volumes:
   db-data:
 
-
 networks:
-  user-network:
+  frontend:
+  backend:
