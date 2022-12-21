@@ -1,6 +1,5 @@
 package com.um.gorju.vehiclemanagement.web.controllers;
 
-import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
 import com.um.gorju.vehiclemanagement.services.*;
 import com.um.gorju.vehiclemanagement.web.controllers.requests.*;
 import com.um.gorju.vehiclemanagement.web.controllers.responses.*;
@@ -21,31 +20,6 @@ public class VehicleHandlerController {
 
     @Autowired
     ModelMapper mapper;
-
-    /*
-    //Create family car, motorcycle, commercial
-    @PostMapping(value = "familycar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddFamilyCarResponse addFamilyCar(@RequestBody AddFamilyCarRequest request){
-        FamilyCar familyCar = mapper.map(request, FamilyCar.class);
-        return new AddFamilyCarResponse(vehicleHandlerService.addFamilyCar(familyCar));
-    }
-
-    @PostMapping(value = "commercial", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddCommercialResponse addCommercial(@RequestBody AddCommercialRequest request){
-        CommercialVehicle commercialVehicle = mapper.map(request, CommercialVehicle.class);
-        return new AddCommercialResponse(vehicleHandlerService.addCommercialVehicle(commercialVehicle));
-    }
-
-    @PostMapping(value = "motorcycle", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddMotorcycleResponse addMotorcycle(@RequestBody AddMotorcycleRequest request){
-        Motorcycle motorcycle = mapper.map(request, Motorcycle.class);
-        return new AddMotorcycleResponse(vehicleHandlerService.addMotorcycle(motorcycle));
-    }
-
-     */
 
     // Create a vehicle
     // add vehicle post request
