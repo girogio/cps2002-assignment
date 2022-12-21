@@ -29,13 +29,13 @@ public class VehicleHandlerController {
         Vehicle v;
         switch(type){
             case "family":
-                v = mapper.map(request, FamilyCar.class);
+                v = new FamilyCar(request.getNumberPlate(), request.getModel(), request.getBrand(), request.getColour());
                 break;
             case "commercial":
-                v = mapper.map(request, CommercialVehicle.class);
+                v = new CommercialVehicle(request.getNumberPlate(), request.getModel(), request.getBrand(), request.getColour());
                 break;
             case "motorcycle":
-                v = mapper.map(request, Motorcycle.class);
+                v = new Motorcycle(request.getNumberPlate(), request.getModel(), request.getBrand(), request.getColour());
                 break;
             default:
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid vehicle type.");
@@ -64,8 +64,8 @@ public class VehicleHandlerController {
     // get all vehicles
     @GetMapping(value = "vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public GetVehicleResponse getAllVehicles(@RequestParam(required = false) String colour,  @RequestParam( required = false) String isAvailable){
-        return new GetVehicleResponse(vehicleHandlerService.getVehicles(colour, isAvailable));
+    public GetVehicleResponse getAllVehicles(@RequestParam(required = false) String colour,  @RequestParam( required = false) String available){
+        return new GetVehicleResponse(vehicleHandlerService.getVehicles(colour, available));
     }
 
 
