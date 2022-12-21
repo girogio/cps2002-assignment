@@ -9,14 +9,13 @@ public class Vehicle {
     private String colour;
     private boolean available;
 
-    public Vehicle(String numberPlate, double price, int capacity, String model, String brand, String colour){
+    public Vehicle(String numberPlate, double price, int capacity, String model, String brand, String colour) {
         this.numberPlate = numberPlate;
         this.price = price;
         this.capacity = capacity;
-        this.model=model;
-        this.brand=brand;
-        this.colour=colour;
-        available=true;
+        this.model = model;
+        this.brand = brand;
+        this.colour = colour;
     }
 
     public Vehicle(String numberPlate, double price, int capacity, String model, String brand, String colour, boolean available){
