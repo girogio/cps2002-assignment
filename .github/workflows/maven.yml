@@ -1,4 +1,4 @@
-name: Run tests – Java 11
+name: Vehicle Service CI
 
 on:
   push:
