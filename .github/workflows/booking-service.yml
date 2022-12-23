@@ -1,13 +1,13 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Node.js CI
+name: Booking Service CI
 
 on:
   push:
-    branches: [ "main", "giorgio" ]
+    branches: [ "booking", "main" ]
   pull_request:
-    branches: [ "main", "giorgio" ]
+    branches: [ "booking", "main" ]
   workflow_dispatch:
 
 jobs:
@@ -23,8 +23,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-        cache-dependency-path: 'gorju/user-management/yarn.lock'
+        cache-dependency-path: 'gorju/booking-management/yarn.lock'
     - run: yarn ci
-      working-directory: gorju/user-management
-    - run: yarn test
-      working-directory: gorju/user-management
+      working-directory: gorju/booking-management
+    # - run: yarn test
+    #   working-directory: gorju/booking-management
