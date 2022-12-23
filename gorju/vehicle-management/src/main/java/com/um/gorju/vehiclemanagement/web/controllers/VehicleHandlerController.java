@@ -82,7 +82,7 @@ public class VehicleHandlerController {
     // Delete vehicle
     @DeleteMapping(value = "vehicles/{numberPlate}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public DeleteVehicleResponse deleteVehicle(@RequestBody DeleteVehicleRequest request){
-        return new DeleteVehicleResponse(vehicleHandlerService.deleteVehicle(request.getNumberPlate()));
+    public DeleteVehicleResponse deleteVehicle(@PathVariable String numberPlate){
+        return new DeleteVehicleResponse(vehicleHandlerService.deleteVehicle(numberPlate));
     }
 }
