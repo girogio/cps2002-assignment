@@ -1,6 +1,6 @@
-from users import Users as users
+import users
+import vehicles
 from utils import wait
-
 
 if __name__ == '__main__':
     while True:
@@ -29,9 +29,9 @@ Y8b d88P                  d88P
         choice = wait('')
 
         if choice == '1':
-            users.menu(users)
+            users.menu()
         elif choice == '2':
-            pass
+            vehicles.menu()
         elif choice == '3':
             pass
         elif choice == '4':
