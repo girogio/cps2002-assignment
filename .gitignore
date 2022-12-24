@@ -1,6 +1,7 @@
 .idea/
 .DS_Store
 *.class
+.vscode
 *.png
 
 gorju/*/target/
@@ -8,3 +9,4 @@ gorju/*/target/
 __pycache__/
 *.class
 
+rest tests/
