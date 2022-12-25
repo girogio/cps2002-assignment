@@ -1,6 +1,19 @@
+from os import environ
+from utils import wait
+
+print(environ.get('PYTHON_ENV'))
+
+if environ.get('PYTHON_ENV') == 'development':
+    environ['USER_API_URL'] = 'http://localhost:3000/api/users/'
+    environ['VEHICLE_API_URL'] = 'http://localhost:3001/api/vehicles/'
+    environ['BOOKING_API_URL'] = 'http://localhost:3002/api/bookings/'
+else:
+    environ['USER_API_URL'] = 'http://proxy/services/users/'
+    environ['VEHICLE_API_URL'] = 'http://proxy/services/vehicles/'
+    environ['BOOKING_API_URL'] = 'http://proxy/services/bookings/'
+
 import users
 import vehicles
-from utils import wait
 
 if __name__ == '__main__':
     while True:
