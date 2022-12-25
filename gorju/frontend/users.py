@@ -1,8 +1,8 @@
 import requests
 from utils import wait
+from os import environ
 
-user_api_url = 'http://localhost/services/users/'
-
+user_api_url = environ.get('USER_API_URL')
 
 def print_user(user):
     print('-' * 30)

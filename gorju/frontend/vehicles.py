@@ -1,7 +1,8 @@
 import requests
 from utils import *
+from os import getenv
 
-vehicle_api_url = 'http://localhost:3000/api/vehicles/'
+vehicle_api_url = getenv('VEHICLE_API_URL')
 
 
 def print_vehicle(vehicle):
