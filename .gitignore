@@ -1,4 +1,12 @@
-gorju-frontend-service/build/demo/faces/female/2.jpg
+.idea/
+.DS_Store
+*.class
+.vscode
 *.png
+
+gorju/*/target/
 *.jpg
 __pycache__/
+*.class
+
+rest tests/
