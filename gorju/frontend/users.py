@@ -24,6 +24,9 @@ def create(name, email):
             response.json()['id']))
     elif response.status_code == 409:
         print('User already exists...')
+    else:
+        print('Something went wrong...')
+        print(response.text)
 
 
 def get(id=''):
@@ -41,17 +44,26 @@ def get(id=''):
                     print_user(user)
     elif response.status_code == 404:
         print('User not found')
+    elif response.status_code == 400:
+        print('Invalid ID supplied...')
+    else:
+        print('Something went wrong...')
+        print(response.text)
 
 
-def update(id, name, email):
+def update(id, name, email, balance):
     response = requests.patch(user_api_url + id, json={
         'name': name,
-        'email': email
+        'email': email,
+        'balance': balance
     })
     if response.status_code == 200:
         print('User updated successfully')
     elif response.status_code == 404:
         print('User not found')
+    else:
+        print('Something went wrong...\n')
+        print(response.text)
 
 
 def delete(id=''):
@@ -60,6 +72,9 @@ def delete(id=''):
         print('User deleted successfully')
     elif response.status_code == 404:
         print('User not found')
+    else:
+        print('Something went wrong...')
+        print(response.text)
 
 
 def addbalance(id, amount):
@@ -70,6 +85,9 @@ def addbalance(id, amount):
         print('Balanced topped up successfully!')
     elif response.status_code == 404:
         print('User not found...')
+    else:
+        print('Something went wrong...')
+        print(response.text)
 
 
 def menu():
@@ -99,7 +117,9 @@ def menu():
             id = wait('Enter user id to update:\n>  ')
             name = wait('Enter new name:\n> ')
             email = wait('Enter new email:\n> ')
-            update(id, name, email)
+            balance = input_price(
+                'Enter new balance: (leave blank to keep current balance)\n>', 'Enter a valid balance...\n')
+            update(id, name, email, balance)
         elif choice == '5':
             id = wait('Enter user id to delete:\n>  ')
             delete(id)
