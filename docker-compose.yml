@@ -5,12 +5,12 @@ services:
     build: ./gorju/frontend
     tty: true
     stdin_open: true
+    environment:
+      - PYTHON_ENV=production
     networks:
       - frontend
     depends_on:
-      - user_app
-      - vehicleapp
-      - booking_app
+      - proxy
   proxy:
     build: ./proxy
     ports:
@@ -19,16 +19,15 @@ services:
       - frontend
       - backend
     depends_on:
-      - frontend
       - vehicleapp
       - user_app
       - booking_app
   booking_app:
     build: ./gorju/booking-management
     environment:
-    - SERVICE_PORT=${SERVICE_PORT}
-    - DATABASE_URL=mongodb://mongodb:27017/gorju-cars
-    networks: 
+      - SERVICE_PORT=${SERVICE_PORT}
+      - DATABASE_URL=mongodb://mongodb:27017/gorju-cars
+    networks:
       - backend
     depends_on:
       - mongodb
