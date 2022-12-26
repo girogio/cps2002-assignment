@@ -60,13 +60,13 @@ def is_number(s):
         return False
 
 
-def input_price():
+def input_price(string='Enter price:\n> ', error='Invalid price. Try again.'):
     while 1 == 1:
-        price = wait('Enter price:\n> ')
+        price = wait(string)
         if is_float(price) or price == '':
             return price if price != '' else -1
         else:
-            wait('Invalid price. Try again.')
+            wait(error)
 
 
 def input_capacity():
