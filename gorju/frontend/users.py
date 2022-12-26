@@ -1,14 +1,16 @@
 import requests
-from utils import wait
+from utils import wait, input_price
 from os import environ
 
 user_api_url = environ.get('USER_API_URL')
+
 
 def print_user(user):
     print('-' * 30)
     print('ID: {}'.format(user['_id']))
     print('Name: {}'.format(user['name']))
     print('Email: {}'.format(user['email']))
+    print('Balance: {}'.format(user['balance']))
     print('-' * 30 + '\n')
 
 
@@ -60,6 +62,16 @@ def delete(id=''):
         print('User not found')
 
 
+def work(id, amount):
+    response = requests.post(user_api_url + id + '/work', json={
+        'amount': amount
+    })
+    if response.status_code == 200:
+        print('Balanced topped up successfully!')
+    elif response.status_code == 404:
+        print('User not found...')
+
+
 def menu():
     while 1 == 1:
         print('''1. Get all users
@@ -68,7 +80,8 @@ def menu():
 4. Update user
 5. Delete user
 6. Delete all users
-7. Back
+7. Add to balance
+8. Exit
 
 > ''', end='')
         choice = wait('')
@@ -93,5 +106,9 @@ def menu():
         elif choice == '6':
             delete()
         elif choice == '7':
+            id = wait('Enter user id:\n>  ')
+            amount = input_price()
+            work(id, amount)
+        elif choice == '8':
             break
         wait()
