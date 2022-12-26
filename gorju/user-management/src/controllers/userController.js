@@ -84,6 +84,21 @@ exports.addBalanceById = (id, amount) => {
   });
 }
 
+exports.getUserByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    if (!(email === undefined || email === null || email === "")) {
+      User.findOne({ email }).then((user) => {
+        if (user === null) {
+          reject({ code: StatusCodes.NOT_FOUND, data: "User not found." });
+        }
+        resolve({ code: StatusCodes.OK, data: user });
+      })
+    } else {
+      reject({ code: StatusCodes.BAD_REQUEST, data: "User email is required." });
+    }
+  });
+}
+
 exports.getUserById = function (id) {
   return new Promise((resolve, reject) => {
     if (!(id === undefined || id === null || id === "")) {

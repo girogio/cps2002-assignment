@@ -33,6 +33,15 @@ router.get("/:id", (req, res) => {
   });
 });
 
+// Get a user by email
+router.get("/email/:email", (req, res) => {
+  userController.getUserByEmail(req.params.email).then((response) => {
+    return res.status(response.code).json(response.data);
+  }).catch((error) => {
+    return res.status(error.code).send(error.data);
+  });
+});
+
 // Update a user by id
 router.patch('/:id', (req, res) => {
   userController.findByIdAndUpdate(req.params.id, req.body).then((response) => {
