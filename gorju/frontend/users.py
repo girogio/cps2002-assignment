@@ -62,8 +62,8 @@ def delete(id=''):
         print('User not found')
 
 
-def work(id, amount):
-    response = requests.post(user_api_url + id + '/work', json={
+def addbalance(id, amount):
+    response = requests.post(user_api_url + id + '/addbalance', json={
         'amount': amount
     })
     if response.status_code == 200:
@@ -108,7 +108,7 @@ def menu():
         elif choice == '7':
             id = wait('Enter user id:\n>  ')
             amount = input_price()
-            work(id, amount)
+            addbalance(id, amount)
         elif choice == '8':
             break
         wait()
