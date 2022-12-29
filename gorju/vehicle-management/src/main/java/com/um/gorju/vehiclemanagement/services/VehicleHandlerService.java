@@ -94,7 +94,7 @@ public class VehicleHandlerService {
 
         while(iterator.hasNext()){
             VehicleEntity vehicleEntity = iterator.next();
-            if(vehicleEntity.getColour().equals(colour)){
+            if(vehicleEntity.getColour().equalsIgnoreCase(colour)){
                 matchingVehicles.add(mapper.map(vehicleEntity, Vehicle.class));
             }
         }
