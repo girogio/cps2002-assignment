@@ -2,26 +2,19 @@ const User = require("../models/userModel.js");
 const StatusCodes = require("http-status-codes").StatusCodes;
 
 exports.createUser = (userObj) => {
+  //validate userObj then save it
   return new Promise((resolve, reject) => {
 
-    let user = new User(userObj);
-
-    if (user.name === undefined || user.email === undefined) {
+    if (userObj.name === undefined || userObj.name === "" || userObj.email === undefined || userObj.email === "") {
       reject({ code: StatusCodes.BAD_REQUEST, data: "User name and email are required." });
     }
 
-    // get users with the same email
-    User.find({ email: user.email }).then((users) => {
-      if (users.length > 0) {
-        reject({ code: StatusCodes.CONFLICT, data: "User with this email already exists." });
-      } else {
-        user.save().then(() => {
-          resolve({ code: StatusCodes.CREATED, data: { id: user._id } });
-        })
-          .catch((error) => {
-            reject({ code: StatusCodes.INTERNAL_SERVER_ERROR, data: error });
-          });
-      }
+    const user = new User(userObj);
+
+    user.save().then(() => {
+      resolve({ code: StatusCodes.CREATED, data: "User created." });
+    }).catch(() => {
+      reject({ code: StatusCodes.CONFLICT, data: "Email is already taken." });
     })
   });
 };
@@ -29,7 +22,7 @@ exports.createUser = (userObj) => {
 exports.deleteUserById = (id) => {
   return new Promise((resolve, reject) => {
     if (!(id === undefined || id === null || id === "")) {
-      User.findByIdAndDelete(id).then((err) => {
+      User.findByIdAndDelete(id).then(() => {
         resolve({ code: StatusCodes.OK, data: "User deleted." });
       }).catch(() => {
         reject({ code: StatusCodes.INTERNAL_SERVER_ERROR, data: "Invalid id." });
@@ -76,7 +69,7 @@ exports.addBalanceById = (id, amount) => {
     } else {
       User.findByIdAndUpdate(id, { $inc: { balance: amount } })
         .then(() => {
-          resolve({ code: StatusCodes.OK, data: "Balance added successfully." });
+          resolve({ code: StatusCodes.OK, data: { message: "Balance added successfully." } });
         }).catch((error) => {
           reject({ code: StatusCodes.INTERNAL_SERVER_ERROR, data: error });
         })
@@ -125,7 +118,7 @@ exports.getAllUsers = () => {
 };
 
 exports.deleteAllUsers = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     User.deleteMany({}).then(() => {
       resolve({ code: StatusCodes.OK, data: "All users deleted." });
     })

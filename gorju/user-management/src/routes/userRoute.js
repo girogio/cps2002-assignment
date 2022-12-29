@@ -1,4 +1,4 @@
-express = require("express");
+const express = require("express");
 const router = express.Router();
 const StatusCodes = require("http-status-codes").StatusCodes;
 const userController = require("../controllers/userController.js");
@@ -8,7 +8,7 @@ const userController = require("../controllers/userController.js");
 // Request body: { name: string, email: string }
 router.post("/", (req, res) => {
   userController.createUser(req.body).then((response) => {
-    return res.status(response.code).json(response.data);
+    return res.status(response.code).json({ message: response.data });
   }).catch((error) => {
     return res.status(error.code).json({ message: error.data })
   })
