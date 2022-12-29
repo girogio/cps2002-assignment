@@ -46,7 +46,7 @@ exports.findByIdAndUpdate = (id, userObj) => {
         userToModify.email = userObj.email === undefined || userObj.email === "" ? userToModify.email : userObj.email;
         userToModify.balance = userObj.balance === undefined || userObj.balance === -1 ? userToModify.balance : userObj.balance;
 
-        updatedUser = new User(userToModify);
+        let updatedUser = new User(userToModify);
 
         updatedUser.save().then(() => {
           resolve({ code: StatusCodes.OK, data: "User updated." });
@@ -110,7 +110,7 @@ exports.getUserById = function (id) {
 };
 
 exports.getAllUsers = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     User.find().then((users) => {
       resolve({ code: StatusCodes.OK, data: users });
     })
