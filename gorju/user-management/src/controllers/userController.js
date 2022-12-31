@@ -12,7 +12,7 @@ exports.createUser = (userObj) => {
     const user = new User(userObj);
 
     user.save().then(() => {
-      resolve({ code: StatusCodes.CREATED, data: "User created." });
+      resolve({ code: StatusCodes.CREATED, data: { user_id: user._id } });
     }).catch(() => {
       reject({ code: StatusCodes.CONFLICT, data: "Email is already taken." });
     })
