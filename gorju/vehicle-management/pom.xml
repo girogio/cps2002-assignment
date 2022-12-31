@@ -15,7 +15,7 @@
         <spring-kafka.version>2.7.8</spring-kafka.version>
         <cucumber.version>6.10.4</cucumber.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
-        <jackson.version>2.13.2</jackson.version>
+        <jackson.version>2.14.0</jackson.version>
         <start-class>com.um.gorju.vehiclemanagement.VehicleManagementApp</start-class>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
