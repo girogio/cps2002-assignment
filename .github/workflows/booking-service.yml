@@ -26,5 +26,5 @@ jobs:
         cache-dependency-path: 'gorju/booking-management/yarn.lock'
     - run: yarn ci
       working-directory: gorju/booking-management
-    # - run: yarn test
-    #   working-directory: gorju/booking-management
+    - run: yarn test
+      working-directory: gorju/booking-management
