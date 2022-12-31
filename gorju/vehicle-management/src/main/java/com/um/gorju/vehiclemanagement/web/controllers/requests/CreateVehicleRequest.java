@@ -7,12 +7,12 @@ public class CreateVehicleRequest {
     private String colour;
     private boolean available;
 
-    public CreateVehicleRequest(String numberPlate, String model, String brand, String colour, String type){
+    public CreateVehicleRequest(String numberPlate, String model, String brand, String colour){
         this.numberPlate = numberPlate;
         this.model=model;
         this.brand=brand;
         this.colour=colour;
-        available=true;
+        this.available=true;
     }
 
     public CreateVehicleRequest(){}

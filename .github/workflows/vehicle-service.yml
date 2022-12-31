@@ -1,10 +1,10 @@
-name: Run tests – Java 11
+name: Vehicle Service CI
 
 on:
   push:
-    branches: 
-      - main
-      - julianne
+    branches: [ "main", "julianne" ]
+  pull_request:
+    branches: [ "main", "julianne" ]
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
         distribution: 'adopt'
         cache: maven
     - name: tests
-      run: mvn -B clean test --file gorju/pom.xml
+      run: mvn -B clean test --file gorju/vehicle-management/pom.xml
 
 # The above workflow will checkout the code from the repository and run the maven build. The workflow will be triggered on every push to the repository.
 

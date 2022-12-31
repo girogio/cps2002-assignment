@@ -94,7 +94,7 @@ public class VehicleHandlerService {
 
         while(iterator.hasNext()){
             VehicleEntity vehicleEntity = iterator.next();
-            if(vehicleEntity.getColour().equals(colour)){
+            if(vehicleEntity.getColour().equalsIgnoreCase(colour)){
                 matchingVehicles.add(mapper.map(vehicleEntity, Vehicle.class));
             }
         }
@@ -164,12 +164,7 @@ public class VehicleHandlerService {
     }
 
     public boolean updateVehicle(UpdateVehicleRequest request) {
-            /*if(repository.existsById(request.getNumberPlate())){
-                repository.save(mapper.map(request, VehicleEntity.class));
-                return true;
-            }
-            return false;
-             */
+
 
             // edit each field of a vehicle only if they are not empty
             if(!repository.existsById(request.getNumberPlate())){
@@ -178,7 +173,7 @@ public class VehicleHandlerService {
 
             VehicleEntity vehicleEntity = repository.findByNumberPlate(request.getNumberPlate());
 
-            if(request.getColour() != null){
+            if(! request.getColour().equals("")){
                 vehicleEntity.setColour(request.getColour());
             }
 
@@ -194,26 +189,14 @@ public class VehicleHandlerService {
                 vehicleEntity.setCapacity(request.getCapacity());
             }
 
-            if(request.getBrand() != null){
+            if(!request.getBrand().equals("")){
                 vehicleEntity.setBrand(request.getBrand());
             }
 
-            if(request.getModel() != null){
+            if(!request.getModel().equals("")){
                 vehicleEntity.setModel(request.getModel());
             }
-            repository.save(mapper.map(request, VehicleEntity.class));
+            repository.save(mapper.map(vehicleEntity, VehicleEntity.class));
             return true;
         }
         }
-
-
-
-
-    /*public boolean updateVehicle(UpdateVehicleRequest request){
-     if(repository.existsById(request.getNumberPlate())){
-        repository.save(mapper.map(request, VehicleEntity.class));
-        return true;
-    }
-        return false;
-    }*/
-

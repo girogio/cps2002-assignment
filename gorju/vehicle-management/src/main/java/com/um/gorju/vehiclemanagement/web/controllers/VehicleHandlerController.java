@@ -1,6 +1,5 @@
 package com.um.gorju.vehiclemanagement.web.controllers;
 
-import com.um.gorju.vehiclemanagement.data.repositories.VehicleRepository;
 import com.um.gorju.vehiclemanagement.services.*;
 import com.um.gorju.vehiclemanagement.web.controllers.requests.*;
 import com.um.gorju.vehiclemanagement.web.controllers.responses.*;
@@ -22,31 +21,6 @@ public class VehicleHandlerController {
     @Autowired
     ModelMapper mapper;
 
-    /*
-    //Create family car, motorcycle, commercial
-    @PostMapping(value = "familycar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddFamilyCarResponse addFamilyCar(@RequestBody AddFamilyCarRequest request){
-        FamilyCar familyCar = mapper.map(request, FamilyCar.class);
-        return new AddFamilyCarResponse(vehicleHandlerService.addFamilyCar(familyCar));
-    }
-
-    @PostMapping(value = "commercial", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddCommercialResponse addCommercial(@RequestBody AddCommercialRequest request){
-        CommercialVehicle commercialVehicle = mapper.map(request, CommercialVehicle.class);
-        return new AddCommercialResponse(vehicleHandlerService.addCommercialVehicle(commercialVehicle));
-    }
-
-    @PostMapping(value = "motorcycle", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddMotorcycleResponse addMotorcycle(@RequestBody AddMotorcycleRequest request){
-        Motorcycle motorcycle = mapper.map(request, Motorcycle.class);
-        return new AddMotorcycleResponse(vehicleHandlerService.addMotorcycle(motorcycle));
-    }
-
-     */
-
     // Create a vehicle
     // add vehicle post request
     @PostMapping(value = "vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,13 +29,13 @@ public class VehicleHandlerController {
         Vehicle v;
         switch(type){
             case "family":
-                v = mapper.map(request, FamilyCar.class);
+                v = new FamilyCar(request.getNumberPlate(), request.getModel(), request.getBrand(), request.getColour());
                 break;
             case "commercial":
-                v = mapper.map(request, CommercialVehicle.class);
+                v = new CommercialVehicle(request.getNumberPlate(), request.getModel(), request.getBrand(), request.getColour());
                 break;
             case "motorcycle":
-                v = mapper.map(request, Motorcycle.class);
+                v = new Motorcycle(request.getNumberPlate(), request.getModel(), request.getBrand(), request.getColour());
                 break;
             default:
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid vehicle type.");
@@ -90,8 +64,8 @@ public class VehicleHandlerController {
     // get all vehicles
     @GetMapping(value = "vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public GetVehicleResponse getAllVehicles(@RequestParam(required = false) String colour,  @RequestParam( required = false) String isAvailable){
-        return new GetVehicleResponse(vehicleHandlerService.getVehicles(colour, isAvailable));
+    public GetVehicleResponse getAllVehicles(@RequestParam(required = false) String colour,  @RequestParam( required = false) String available){
+        return new GetVehicleResponse(vehicleHandlerService.getVehicles(colour, available));
     }
 
 
@@ -108,7 +82,7 @@ public class VehicleHandlerController {
     // Delete vehicle
     @DeleteMapping(value = "vehicles/{numberPlate}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public DeleteVehicleResponse deleteVehicle(@RequestBody DeleteVehicleRequest request){
-        return new DeleteVehicleResponse(vehicleHandlerService.deleteVehicle(request.getNumberPlate()));
+    public DeleteVehicleResponse deleteVehicle(@PathVariable String numberPlate){
+        return new DeleteVehicleResponse(vehicleHandlerService.deleteVehicle(numberPlate));
     }
 }

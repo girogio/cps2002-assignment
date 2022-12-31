@@ -98,7 +98,7 @@ public class VehicleManagementControllerTests {
         // Setup
         String type = "family";
         CreateVehicleRequest request =
-                new CreateVehicleRequest("ABC123","Captur", "Renault", "White", "family");
+                new CreateVehicleRequest("ABC123","Captur", "Renault", "White");
         boolean expectedEntered = true;
         when(vehicleManagementServiceMock.addVehicle(any(Vehicle.class))).thenReturn(expectedEntered);
 
@@ -117,7 +117,7 @@ public class VehicleManagementControllerTests {
         // Setup
         String type = "commercial";
         CreateVehicleRequest request =
-                new CreateVehicleRequest("ABC123","Captur", "Renault", "White", "commercial");
+                new CreateVehicleRequest("ABC123","Captur", "Renault", "White" );
         boolean expectedEntered = true;
         when(vehicleManagementServiceMock.addVehicle(any(Vehicle.class))).thenReturn(expectedEntered);
 
@@ -137,7 +137,7 @@ public class VehicleManagementControllerTests {
         // Setup
         String type = "motorcycle";
         CreateVehicleRequest request =
-                new CreateVehicleRequest("ABC123","Captur", "Renault", "White", "motorcycle");
+                new CreateVehicleRequest("ABC123","Captur", "Renault", "White");
         boolean expectedEntered = true;
         when(vehicleManagementServiceMock.addVehicle(any(Vehicle.class))).thenReturn(expectedEntered);
 
@@ -157,7 +157,7 @@ public class VehicleManagementControllerTests {
         String type = "bus";
         boolean caught = false;
         CreateVehicleRequest request =
-                new CreateVehicleRequest("ABC123","City", "Mercedes", "Gray", "bus");
+                new CreateVehicleRequest("ABC123","City", "Mercedes", "Gray");
         boolean expectedEntered = true;
         when(vehicleManagementServiceMock.addVehicle(any(Vehicle.class))).thenReturn(expectedEntered);
 
@@ -179,15 +179,14 @@ public class VehicleManagementControllerTests {
     public void testDeleteExistingVehicle(){
         // Setup
         String numberPlate = "ABC123";
-        CreateVehicleRequest createRequest = new CreateVehicleRequest("ABC123", "Captur", "Renault", "White", "family");
+        CreateVehicleRequest createRequest = new CreateVehicleRequest("ABC123", "Captur", "Renault", "White");
         vehicleHandlerController.createVehicle(createRequest, "family");
 
-        DeleteVehicleRequest deleteRequest = new DeleteVehicleRequest(numberPlate);
         boolean expectedFound = true;
         when(vehicleManagementServiceMock.deleteVehicle(numberPlate)).thenReturn(expectedFound);
 
         // Exercise
-        DeleteVehicleResponse actualResponse = vehicleHandlerController.deleteVehicle(deleteRequest);
+        DeleteVehicleResponse actualResponse = vehicleHandlerController.deleteVehicle(numberPlate);
 
         // Verify
         assertNotNull(actualResponse, "Response is null.");
@@ -201,12 +200,11 @@ public class VehicleManagementControllerTests {
     public void testDeleteNonExistingVehicle(){
         // Setup
         String numberPlate = "ABC123";
-        DeleteVehicleRequest deleteRequest = new DeleteVehicleRequest(numberPlate);
         boolean expectedFound = false;
         when(vehicleManagementServiceMock.deleteVehicle(numberPlate)).thenReturn(expectedFound);
 
         // Exercise
-        DeleteVehicleResponse actualResponse = vehicleHandlerController.deleteVehicle(deleteRequest);
+        DeleteVehicleResponse actualResponse = vehicleHandlerController.deleteVehicle(numberPlate);
 
         // Verify
         assertNotNull(actualResponse, "Response is null.");
