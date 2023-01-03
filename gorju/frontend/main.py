@@ -1,19 +1,16 @@
-from os import environ
-from utils import wait
-
-print(environ.get('PYTHON_ENV'))
-
-if environ.get('PYTHON_ENV') == 'development':
-    environ['USER_API_URL'] = 'http://localhost:3000/api/users/'
-    environ['VEHICLE_API_URL'] = 'http://localhost:3001/api/vehicles/'
-    environ['BOOKING_API_URL'] = 'http://localhost:3002/api/bookings/'
-else:
-    environ['USER_API_URL'] = 'http://proxy/services/users/'
-    environ['VEHICLE_API_URL'] = 'http://proxy/services/vehicles/'
-    environ['BOOKING_API_URL'] = 'http://proxy/services/bookings/'
-
-import users
+import bookings
 import vehicles
+import users
+
+from os import environ
+from utils import wait, load_env
+from time import sleep
+
+
+sleep(1)
+
+load_env()
+
 
 if __name__ == '__main__':
     while True:
@@ -39,16 +36,20 @@ Y8b d88P                  d88P
 4. Exit
 
 > ''', end='')
-        choice = wait('')
 
+        choice = wait('')
         if choice == '1':
             users.menu()
         elif choice == '2':
             vehicles.menu()
         elif choice == '3':
-            pass
+            bookings.menu()
         elif choice == '4':
             break
+        elif choice == '5':
+            print(environ['USER_API_URL'])
+            print(environ['VEHICLE_API_URL'])
+            print(environ['BOOKING_API_URL'])
         else:
             print('Invalid choice')
             wait()
