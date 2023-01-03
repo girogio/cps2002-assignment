@@ -6,7 +6,7 @@ services:
     tty: true
     stdin_open: true
     environment:
-      - PYTHON_ENV=production
+      - PYTHON_ENV=container
     networks:
       - frontend
     depends_on:
