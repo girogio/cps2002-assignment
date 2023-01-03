@@ -1,9 +1,6 @@
 import requests
 from utils import *
-from os import getenv
-
-vehicle_api_url = getenv('VEHICLE_API_URL')
-
+from os import environ
 
 def print_vehicle(vehicle):
     print('-' * 30)
@@ -18,7 +15,7 @@ def print_vehicle(vehicle):
 
 
 def create(number_plate, brand, model, colour, type):
-    r = requests.post(vehicle_api_url + f'?type={type}', json={
+    r = requests.post(environ['VEHICLE_API_URL'] + f'?type={type}', json={
         'numberPlate': number_plate,
         'brand': brand,
         'model': model,
@@ -34,7 +31,7 @@ def create(number_plate, brand, model, colour, type):
 
 
 def get(id='', available='', colour=''):
-    url = vehicle_api_url
+    url = environ['VEHICLE_API_URL']
     if id != '':
         url += id
     else:
@@ -61,14 +58,14 @@ def get(id='', available='', colour=''):
 
 
 def getAvailable():
-    r = requests.get(vehicle_api_url + '?available=true')
+    r = requests.get(environ['VEHICLE_API_URL'] + '?available=true')
     return r.json()['vehicles']
 
 
 def update(number_plate='', brand='', model='', colour='', price=-1, capacity=-1, available=''):
     available = requests.get(
-        vehicle_api_url + number_plate).json()['vehicles'][0]['available']
-    r = requests.put(vehicle_api_url, json={
+        environ['VEHICLE_API_URL'] + number_plate).json()['vehicles'][0]['available']
+    r = requests.put(environ['VEHICLE_API_URL'], json={
         'numberPlate': number_plate,
         'brand': brand,
         'price': price,
@@ -88,7 +85,7 @@ def update(number_plate='', brand='', model='', colour='', price=-1, capacity=-1
 
 
 def delete(number_plate):
-    r = requests.delete(vehicle_api_url + number_plate)
+    r = requests.delete(environ['VEHICLE_API_URL'] + number_plate)
     if r.json()['found'] == True:
         print('Vehicle deleted successfully')
     else:
