@@ -2,8 +2,6 @@ import requests
 from utils import wait, input_price
 from os import environ
 
-user_api_url = environ.get('USER_API_URL')
-
 
 def print_user(user):
     print('-' * 30)
@@ -15,22 +13,34 @@ def print_user(user):
 
 
 def create(name, email):
-    response = requests.post(user_api_url, json={
+    response = requests.post(environ['USER_API_URL'], json={
         'name': name,
         'email': email
     })
     if response.status_code == 201:
         print('User created successfully with ID: {}\n'.format(
-            response.json()['id']))
+            response.json()['user_id']))
     elif response.status_code == 409:
         print('User already exists...')
     else:
         print('Something went wrong...')
         print(response.text)
 
+def getByEmail(email):
+    response = requests.get(environ['USER_API_URL'] + 'email/' + email)
+    if response.status_code == 200:
+        print('User found\n')
+        print_user(response.json())
+    elif response.status_code == 404:
+        print('User not found')
+    elif response.status_code == 400:
+        print('Invalid ID supplied...')
+    else:
+        print('Something went wrong...')
+        print(response.text)
 
 def get(id=''):
-    response = requests.get(user_api_url + id)
+    response = requests.get(environ['USER_API_URL'] + id)
     if response.status_code == 200:
         if id:
             print('User found\n')
@@ -52,7 +62,7 @@ def get(id=''):
 
 
 def update(id, name, email, balance):
-    response = requests.patch(user_api_url + id, json={
+    response = requests.patch(environ['USER_API_URL'] + id, json={
         'name': name,
         'email': email,
         'balance': balance
@@ -67,7 +77,7 @@ def update(id, name, email, balance):
 
 
 def delete(id=''):
-    response = requests.delete(user_api_url + id)
+    response = requests.delete(environ['USER_API_URL'] + id)
     if response.status_code == 200:
         print('User deleted successfully')
     elif response.status_code == 404:
@@ -78,7 +88,7 @@ def delete(id=''):
 
 
 def addbalance(id, amount):
-    response = requests.post(user_api_url + id + '/addbalance', json={
+    response = requests.post(environ['USER_API_URL'] + id + '/addbalance', json={
         'amount': amount
     })
     if response.status_code == 200:
@@ -99,7 +109,8 @@ def menu():
 5. Delete user
 6. Delete all users
 7. Add to balance
-8. Exit
+8. Get user by email
+9. Exit
 
 > ''', end='')
         choice = wait('')
@@ -130,5 +141,8 @@ def menu():
             amount = input_price()
             addbalance(id, amount)
         elif choice == '8':
+            email = wait('Enter email:\n>  ')
+            getByEmail(email)
+        elif choice == '9':
             break
         wait()

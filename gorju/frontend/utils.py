@@ -1,4 +1,42 @@
 import re
+from os import environ
+
+
+def load_env():
+
+    if 'PYTHON_ENV' in environ:
+        if environ['PYTHON_ENV'] == 'container':
+            print('\nWelcome to the Gorju Car Rental System CLI.')
+            print('This is a container environment.\n')
+            wait('Press enter to continue...')
+            host = 'proxy'
+            booking_port, user_port, vehicle_port = '', '', ''
+    else:
+
+        with open('.env', 'r') as f:
+            for line in f.readlines():
+                key, value = line.split('=')
+                environ[key] = value.strip()
+
+        if environ.get('PYTHON_ENV') == 'development':
+
+            print('\nWelcome to the Gorju Car Rental System CLI.')
+            print('This is a development environment.\n')
+            wait('Press enter to continue...')
+            host = 'localhost'
+            booking_port, user_port, vehicle_port = ':3000', ':3001', ':3002'
+
+        elif environ.get('PYTHON_ENV') == 'production':
+
+            print('\nWelcome to the Gorju Car Rental System CLI.')
+            print('This is a production environment.\n')
+            wait('Press enter to continue...')
+            host = 'localhost'
+            booking_port, user_port, vehicle_port = '', '', ''
+
+    environ['BOOKING_API_URL'] = f'http://{host}{booking_port}/api/bookings/'
+    environ['USER_API_URL'] = f'http://{host}{user_port}/api/users/'
+    environ['VEHICLE_API_URL'] = f'http://{host}{vehicle_port}/api/vehicles/'
 
 
 def wait(msg='\nPress enter to continue...'):
