@@ -12,8 +12,10 @@ This project encompasses a car rental system, managed via a microservice archite
 
 ## Quick start
 
-```
-docker-compose up -d --build && docker attach cps2002-assignment-frontend-1
+```bash
+docker-compose up -d --build
+cd gorju/frontend
+python3 main.py
 ```
 
 
