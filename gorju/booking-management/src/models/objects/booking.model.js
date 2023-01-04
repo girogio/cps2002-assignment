@@ -27,36 +27,35 @@ const bookingSchema = new mongoose.Schema({
     paid: {
         type: Boolean,
         default: false
+    },
+}, {
+    methods: {
+        pay: function () {
+            return new Promise((resolve, reject) => {
+
+                userController.getUser(this.booker_id).then((user) => {
+
+                    if (user.balance < this.price) {
+                        return reject({ code: 406, data: "Insufficient funds" })
+                    }
+                    axios.patch(process.env.USER_API_URL + this.booker_id, {
+                        balance: user.balance - this.price
+                    }).catch(() => {
+                        return reject({ code: 500, data: "Error updating user balance" })
+                    })
+
+                    this.paid = true
+
+                    this.save()
+
+                    return resolve({ code: 200, data: "Booking paid" })
+
+                }).catch((err) => {
+                    return reject(err)
+                })
+            })
+        }
     }
 })
-
-bookingSchema.methods.pay = function () {
-    return new Promise((resolve, reject) => {
-
-        userController.getUser().then((user) => {
-
-            if (user.balance < this.price) {
-                return reject({ code: 406, data: "Insufficient funds" })
-            }
-
-            try {
-                axios.patch(process.env.USER_API_URL + this.booker_id, {
-                    balance: user.balance - this.price
-                })
-            } catch {
-                return reject({ code: 500, data: "Could not update user balance" })
-            }
-
-            this.paid = true
-
-            this.save()
-
-            return resolve({ code: 200, data: "Booking paid" })
-
-        }).catch((err) => {
-            return reject(err)
-        })
-    })
-}
 
 export default mongoose.model('Booking', bookingSchema)
