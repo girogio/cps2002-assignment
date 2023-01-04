@@ -23,7 +23,7 @@ describe("Testing the booking model", () => {
             sandbox.restore()
         })
 
-        it("it should resolve and return success message if funds are sufficient", (done) => {
+        it("it should resolve and return success message if funds are sufficient", async () => {
 
             let user = {
                 _id: "63ae05b628347818c81e10f2",
@@ -57,6 +57,8 @@ describe("Testing the booking model", () => {
                 expect(response).to.deep.equal({ code: 200, data: "Booking paid" })
                 expect(booking.paid).to.be.true
                 expect(user.balance).to.equal(900)
+                console.log(response)
+                console.log(user)
                 done()
             })
         })
