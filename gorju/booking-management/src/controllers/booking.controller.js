@@ -63,7 +63,6 @@ const createBooking = (request) => {
 
     vehicleController.getVehicle().then((vehicle) => {
       availability = vehicle.available
-      console.log(availability)
       if(!vehicle.available){
         return reject({ code: StatusCodes.BAD_REQUEST, data: 'Vehicle is not available' })
       }
@@ -136,4 +135,4 @@ const fulfillBookingById = (id) => {
   })
 }
 
-export default { getCalendar, getAllBookings, createBooking, getBookingById, fulfillBookingById, updateBookingById }
+export default { getCalendar, getAllBookings, createBooking, getBookingById, fulfillBookingById }
