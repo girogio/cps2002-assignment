@@ -63,7 +63,7 @@ const createBooking = (request) => {
 
     vehicleController.getVehicle().then((vehicle) => {
       availability = vehicle.available
-      if(!vehicle.available){
+      if (!vehicle.available) {
         return reject({ code: StatusCodes.BAD_REQUEST, data: 'Vehicle is not available' })
       }
     })
@@ -99,8 +99,6 @@ const createBooking = (request) => {
 
 const getBookingById = (id) => {
   return new Promise((resolve, reject) => {
-    if (id === undefined || id === null || id === "")
-      reject({ code: StatusCodes.BAD_REQUEST, data: "Booking id is required." })
     Booking.findById(id).then((booking) => {
       if (booking === null)
         reject({ code: StatusCodes.NOT_FOUND, data: "Booking not found." })
@@ -114,10 +112,6 @@ const getBookingById = (id) => {
 
 const fulfillBookingById = (id) => {
   return new Promise((resolve, reject) => {
-
-    if (id === undefined || id === "")
-      reject({ code: StatusCodes.BAD_REQUEST, data: "Booking id is required." })
-
     Booking.findById(id).then((booking) => {
       if (booking.paid === false) {
         booking.pay().then((response) => {

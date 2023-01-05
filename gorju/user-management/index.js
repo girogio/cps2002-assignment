@@ -1,8 +1,8 @@
 
-express = require('express')
-mongoose = require('mongoose')
-cors = require('cors')
-dotenv = require('dotenv')
+let express = require('express')
+let mongoose = require('mongoose')
+let cors = require('cors')
+let dotenv = require('dotenv')
 
 const app = express()
 const db = mongoose.connection

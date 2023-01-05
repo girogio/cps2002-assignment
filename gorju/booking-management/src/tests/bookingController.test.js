@@ -4,9 +4,9 @@ import sinonChai from "sinon-chai";
 import mongoose from "mongoose";
 import bookingController from "../controllers/booking.controller.js";
 import bookingModel from "../models/objects/booking.model.js";
- 
+
 import userController from "../controllers/user.controller.js";
-import vehicleController  from "../controllers/vehicle.controller.js";
+import vehicleController from "../controllers/vehicle.controller.js";
 
 use(sinonChai)
 const sandbox = sinon.createSandbox()
@@ -143,7 +143,7 @@ describe("Testing the booking controller", () => {
                 "name": "John Doe",
                 "email": "john@doe.com",
                 "balance": 1000
-          })
+            })
 
             let findStub = sandbox.stub(mongoose.Model, 'find').resolves([])
 
@@ -282,14 +282,6 @@ describe("Testing the booking controller", () => {
                 done()
             })
         })
-
-        it("it should reject and return status code 400 if booking id is not supplied", (done) => {
-
-            bookingController.getBookingById().catch((error) => {
-                expect(error.code).to.be.equal(400)
-                done()
-            })
-        })
     })
 
     describe("Testing fulfillBookingById", () => {
@@ -377,16 +369,6 @@ describe("Testing the booking controller", () => {
                 done()
             })
         })
-
-        it("it should reject if no id is supplied", (done) => {
-
-            bookingController.fulfillBookingById().catch((error) => {
-                expect(error.code).to.be.equal(400)
-                expect(error.data).to.be.eq("Booking id is required.")
-                done()
-            })
-        })
-
     })
 })
 
