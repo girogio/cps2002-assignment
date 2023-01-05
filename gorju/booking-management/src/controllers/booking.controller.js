@@ -136,29 +136,4 @@ const fulfillBookingById = (id) => {
   })
 }
 
-const updateBookingById = (id, bookingObject) => {
-  return new Promise((resolve, reject) => {
-    if (id === undefined || id === null || id === "")
-      reject({ code: StatusCodes.BAD_REQUEST, data: "Booking id is required." })
-
-    Booking.findById(id).then((booking) => {
-
-      if (bookingObject.booker_id !== undefined)
-        booking.booker_id = bookingObject.booker_id
-      if (bookingObject.number_plate !== undefined)
-        booking.number_plate = bookingObject.number_plate
-      if (bookingObject.paid !== undefined)
-        booking.paid = bookingObject.paid
-
-      booking.save().then(() => {
-        resolve(booking)
-      }).catch((error) => {
-        reject({ code: StatusCodes.SERVICE_UNAVAILABLE, data: error })
-      })
-    }).catch((error) => {
-      reject({ code: StatusCodes.NOT_FOUND, data: error })
-    })
-  })
-}
-
 export default { getCalendar, getAllBookings, createBooking, getBookingById, fulfillBookingById, updateBookingById }

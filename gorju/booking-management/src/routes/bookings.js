@@ -58,14 +58,4 @@ router.delete('/:id', async (req, res) => {
     })
 })
 
-// update a booking by id
-router.put('/:id', async (req, res) => {
-    bookingController.updateBookingById(req.params.id, req.body).then(() => {
-        res.status(StatusCodes.NO_CONTENT).json()
-    }).catch((error) => {
-        res.status(error.code).json({ success: false, message: error.data })
-    })
-})
-
-
 export default router
