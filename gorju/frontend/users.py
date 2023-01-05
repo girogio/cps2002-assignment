@@ -1,5 +1,5 @@
 import requests
-from utils import wait, input_price
+from utils import wait, input_price, enter_email
 from os import environ
 
 
@@ -26,18 +26,13 @@ def create(name, email):
         print('Something went wrong...')
         print(response.text)
 
+
 def getByEmail(email):
     response = requests.get(environ['USER_API_URL'] + 'email/' + email)
     if response.status_code == 200:
         print('User found\n')
-        print_user(response.json())
-    elif response.status_code == 404:
-        print('User not found')
-    elif response.status_code == 400:
-        print('Invalid ID supplied...')
-    else:
-        print('Something went wrong...')
-        print(response.text)
+    return (response.json())
+
 
 def get(id=''):
     response = requests.get(environ['USER_API_URL'] + id)
@@ -49,17 +44,18 @@ def get(id=''):
             if len(response.json()) == 0:
                 print('No users found')
             else:
-                for idx, user in enumerate(response.json()):
-                    print('User #{}'.format(idx + 1))
+                for user in response.json():
                     print_user(user)
-    elif response.status_code == 404:
-        print('User not found')
-    elif response.status_code == 400:
-        print('Invalid ID supplied...')
     else:
-        print('Something went wrong...')
-        print(response.text)
+        print('User not found')
 
+def getUserByEmail(email):
+    response = requests.get(environ['USER_API_URL'] + 'email/' + email)
+    if response.status_code == 200:
+        print('User found\n')
+        print_user(response.json())
+    else:
+        print('User not found')
 
 def update(id, name, email, balance):
     response = requests.patch(environ['USER_API_URL'] + id, json={
@@ -79,7 +75,7 @@ def update(id, name, email, balance):
 def delete(id=''):
     response = requests.delete(environ['USER_API_URL'] + id)
     if response.status_code == 200:
-        print('User deleted successfully')
+        print('User/s deleted successfully')
     elif response.status_code == 404:
         print('User not found')
     else:
@@ -93,12 +89,8 @@ def addbalance(id, amount):
     })
     if response.status_code == 200:
         print('Balanced topped up successfully!')
-    elif response.status_code == 404:
-        print('User not found...')
     else:
-        print('Something went wrong...')
-        print(response.text)
-
+        print('User not found...')
 
 def menu():
     while 1 == 1:
@@ -122,12 +114,12 @@ def menu():
             get(id)
         elif choice == '3':
             name = wait('Enter name:\n> ')
-            email = wait('Enter email:\n> ')
+            email = enter_email()
             create(name, email)
         elif choice == '4':
             id = wait('Enter user id to update:\n>  ')
-            name = wait('Enter new name:\n> ')
-            email = wait('Enter new email:\n> ')
+            name = wait('Enter new name: (leave blank to keep current name)\n> ')
+            email = wait('Enter new email: (leave blank to keep current email)\n> ')
             balance = input_price(
                 'Enter new balance: (leave blank to keep current balance)\n>', 'Enter a valid balance...\n')
             update(id, name, email, balance)
@@ -142,7 +134,7 @@ def menu():
             addbalance(id, amount)
         elif choice == '8':
             email = wait('Enter email:\n>  ')
-            getByEmail(email)
+            getUserByEmail(email)
         elif choice == '9':
             break
         wait()

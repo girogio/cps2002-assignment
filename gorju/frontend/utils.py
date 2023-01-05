@@ -1,4 +1,5 @@
 import re
+import users
 from os import environ
 
 
@@ -116,3 +117,31 @@ def input_capacity():
             return capacity
         else:
             wait('Invalid capacity. Try again.')
+
+def enter_date(msg):
+    while 1 == 1:
+        date = wait(msg)
+        if re.match(r'^\d{2}-\d{2}-\d{4}$', date):
+            return date
+        else:
+            wait('Invalid date. Try again.')
+
+def enter_email():
+    while 1 == 1:
+        email = wait('Enter email:\n> ')
+        if valid_email(email):
+            return email
+        else:
+            wait('Invalid email. Try again.')
+
+def get_user_by_email():
+    while 1 == 1:
+        email = wait('Enter client email:\n> ')
+        if valid_email(email):
+            user = users.getByEmail(email)
+            if user is not None:
+                return user
+            else:
+                wait('User not found. Try again.')
+        else:
+            wait('Invalid email. Try again.')

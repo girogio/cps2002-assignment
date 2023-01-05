@@ -2,6 +2,7 @@ import requests
 from utils import *
 from os import environ
 
+
 def print_vehicle(vehicle):
     print('-' * 30)
     print('Vehicle ID: {}'.format(vehicle['numberPlate']))
@@ -15,6 +16,7 @@ def print_vehicle(vehicle):
 
 
 def create(number_plate, brand, model, colour, type):
+    number_plate = number_plate.upper()
     r = requests.post(environ['VEHICLE_API_URL'] + f'?type={type}', json={
         'numberPlate': number_plate,
         'brand': brand,
@@ -31,6 +33,7 @@ def create(number_plate, brand, model, colour, type):
 
 
 def get(id='', available='', colour=''):
+    id = id.upper()
     url = environ['VEHICLE_API_URL']
     if id != '':
         url += id
@@ -63,8 +66,15 @@ def getAvailable():
 
 
 def update(number_plate='', brand='', model='', colour='', price=-1, capacity=-1, available=''):
-    available = requests.get(
-        environ['VEHICLE_API_URL'] + number_plate).json()['vehicles'][0]['available']
+    number_plate = number_plate.upper()
+    r = requests.get(environ['VEHICLE_API_URL'] + number_plate)
+
+    if r.status_code == 404:
+        print('Vehicle not found...')
+        return
+
+    available = r.json()['vehicles'][0]['available']
+
     r = requests.put(environ['VEHICLE_API_URL'], json={
         'numberPlate': number_plate,
         'brand': brand,
@@ -77,14 +87,13 @@ def update(number_plate='', brand='', model='', colour='', price=-1, capacity=-1
 
     if r.status_code == 200:
         print('Vehicle updated successfusaly')
-    elif r.status_code == 404:
-        print('Vehicle not found...')
     else:
-        print('Something went wrong...')
+        print('Something went wrong...\n')
         print(r.json())
 
 
 def delete(number_plate):
+    number_plate = number_plate.upper()
     r = requests.delete(environ['VEHICLE_API_URL'] + number_plate)
     if r.json()['found'] == True:
         print('Vehicle deleted successfully')
