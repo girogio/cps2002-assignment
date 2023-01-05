@@ -40,14 +40,6 @@ describe("Testing the user controller", () => {
   });
 
   describe("Testing the getUserByEmail function", () => {
-    it("should reject if no email is provided", (done) => {
-
-      userController.getUserByEmail().catch((error) => {
-        expect(error.code).to.equal(400);
-        expect(error.data).to.equal("User email is required.");
-        done();
-      })
-    })
 
     it("should reject if the email is not found", (done) => {
 
@@ -56,7 +48,7 @@ describe("Testing the user controller", () => {
         .stub(mongoose.Model, "findOne")
         .resolves(null);
 
-      userController.getUserByEmail("asd").then( () => {})
+      userController.getUserByEmail("asd").then(() => { })
 
       userController.getUserByEmail("asd").catch((error) => {
         expect(error.code).to.equal(404);
@@ -80,31 +72,6 @@ describe("Testing the user controller", () => {
       // creating a new user 
       userController.createUser(sampleUser).then(() => {
         expect(saveStub).to.have.been.calledOnce;
-        done()
-      })
-    })
-
-
-    it("it should reject if the user name is not provided", (done) => {
-      let user = {
-        email: "john@doe.com",
-        name: undefined
-      };
-      userController.createUser(user).catch((error) => {
-        expect(error.code).to.equal(400);
-        expect(error.data).to.equal("User name and email are required.");
-        done()
-      })
-    })
-
-    it("it should reject if the email is not provided", (done) => {
-      let user = {
-        email: undefined,
-        name: "John Doe"
-      };
-      userController.createUser(user).catch((error) => {
-        expect(error.code).to.equal(400);
-        expect(error.data).to.equal("User name and email are required.");
         done()
       })
     })
@@ -167,13 +134,6 @@ describe("Testing the user controller", () => {
         expect(error.code).to.equal(500);
       });
     });
-
-    it("should throw an error if no id is provided", () => {
-      userController.getUserById().catch((error) => {
-        expect(error.code).to.equal(400);
-        expect(error.data).to.equal("User id is required.");
-      })
-    })
   });
 
   describe("Testing the getAllUsers function", () => {
@@ -223,12 +183,6 @@ describe("Testing the user controller", () => {
 
     });
 
-    it("it should reject if id is undefined", (done) => {
-      userController.deleteUserById().catch(() => {
-        done()
-      })
-    });
-
     it("it should reject if user is not found", (done) => {
 
       sandbox.restore();
@@ -248,14 +202,6 @@ describe("Testing the user controller", () => {
     it("it should resolve and update a user by id", (done) => {
       sandbox.stub(mongoose.Model, "findByIdAndUpdate").resolves();
       userController.addBalanceById("1234").then(() => {
-        done()
-      })
-    })
-
-    it("it should reject if id is undefined", (done) => {
-      userController.addBalanceById().catch((error) => {
-        expect(error.data).to.equal("User id is required.");
-        expect(error.code).to.equal(400);
         done()
       })
     })
@@ -316,14 +262,5 @@ describe("Testing the user controller", () => {
         done()
       })
     })
-
-    it("it should reject if user id is not supplied", (done) => {
-      userController.findByIdAndUpdate().catch((error) => {
-        expect(error.data).to.equal("User id is required.");
-        expect(error.code).to.equal(400);
-        done()
-      })
-    })
-
   })
 });

@@ -7,6 +7,15 @@ const userController = require("../controllers/userController.js");
 // POST /api/users
 // Request body: { name: string, email: string }
 router.post("/", (req, res) => {
+
+  if (req.body.name == undefined || req.body.name == "") {
+    return res.status(400).json({ sucess: false, message: "Bad request, name is required" })
+  }
+
+  if (req.body.email == undefined || req.body.email == "") {
+    return res.status(400).json({ sucess: false, message: "Bad request, email is required" })
+  }
+
   userController.createUser(req.body).then((response) => {
     return res.status(response.code).json(response.data);
   }).catch((error) => {
@@ -26,6 +35,11 @@ router.get("/", (req, res) => {
 
 // Get a user by id
 router.get("/:id", (req, res) => {
+
+  if (req.params.id == undefined) {
+    return res.status(400).json({ success: false, message: "Bad request, id is required" })
+  }
+
   userController.getUserById(req.params.id).then((response) => {
     return res.status(response.code).json(response.data);
   }).catch((error) => {
@@ -35,6 +49,11 @@ router.get("/:id", (req, res) => {
 
 // Get a user by email
 router.get("/email/:email", (req, res) => {
+
+  if (req.params.email == undefined) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: "Bad request, email is required" })
+  }
+
   userController.getUserByEmail(req.params.email).then((response) => {
     return res.status(response.code).json(response.data);
   }).catch((error) => {
@@ -44,6 +63,11 @@ router.get("/email/:email", (req, res) => {
 
 // Update a user by id
 router.patch('/:id', (req, res) => {
+
+  if(req.params.id == undefined){
+    return res.status(400).json({success: false, message: "Bad request, id is required"})
+  }
+
   userController.findByIdAndUpdate(req.params.id, req.body).then((response) => {
     res.status(response.code).json(response.data)
   }).catch((error) => {
@@ -53,6 +77,11 @@ router.patch('/:id', (req, res) => {
 
 // Delete a user by id
 router.delete('/:id', (req, res) => {
+
+  if (req.params.id == undefined) {
+    return res.status(400).json({ success: false, message: "Bad request, id is required" })
+  }
+
   userController.deleteUserById(req.params.id).then((response) => {
     res.status(response.code).json(response.data)
   }).catch((error) => {
@@ -71,6 +100,17 @@ router.delete("/", (req, res) => {
 
 
 router.post('/:id/addbalance', (req, res) => {
+
+  if (req.params.id == undefined) {
+    return res.status(400).json({ "success": false, message: "Bad request, ID is required" })
+  }
+
+  if (req.body.amount == undefined) {
+    return res.status(400).json({ success: false, message: "Bad request, amount is required" })
+  } else if (req.body.amount < 0) {
+    return res.status(400).json({ success: false, message: "Bad request, amount is invalid" })
+  }
+
   userController.addBalanceById(req.params.id, req.body.amount).then((response) => {
     res.status(response.code).json(response.data)
   }).catch((error) => {
