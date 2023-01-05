@@ -52,7 +52,6 @@ createBookingRequestSchema.methods.calculatePrice = async function () {
     // get amount of days between from_date and to_date
     let days_difference = this.days_difference()
 
-
     let vehicle = await vehicleController.getVehicle(this.number_plate)
 
     return vehicle.price * days_difference

@@ -143,7 +143,7 @@ describe("Testing the booking controller", () => {
                 "name": "John Doe",
                 "email": "john@doe.com",
                 "balance": 1000
-            })
+          })
 
             let findStub = sandbox.stub(mongoose.Model, 'find').resolves([])
 
@@ -159,15 +159,12 @@ describe("Testing the booking controller", () => {
             })
 
             bookingController.createBooking(request).then((booking) => {
-                expect(getUserStub).to.have.been.called
                 expect(getVehicleStub).to.have.been.called
                 expect(findStub).to.have.been.called
                 expect(saveStub).to.have.been.called
                 expect(booking).to.be.an('object')
                 expect(booking).to.be.deep.equal({ code: 201, data: returnedBooking._id })
                 done()
-            }).catch((err) => {
-                console.log(err)
             })
         })
 
@@ -230,7 +227,6 @@ describe("Testing the booking controller", () => {
             })
 
             bookingController.createBooking(request).catch((error) => {
-                expect(getUserStub).to.have.been.called
                 expect(getVehicleStub).to.have.been.called
                 expect(findStub).to.have.been.called
                 expect(saveStub).to.not.have.been.called

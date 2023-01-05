@@ -9,7 +9,7 @@ const router = express.Router()
 // get all bookings
 router.get('/', async (req, res) => {
     bookingController.getAllBookings().then((bookings) => {
-        res.status(StatusCodes.OK).json(bookings)
+        res.status(StatusCodes.OK).json({bookings: bookings})
     }).catch((error) => {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
     })
@@ -23,6 +23,13 @@ router.get('/calendar', async (req, res) => {
     })
 })
 
+router.get('/calendar/:number_plate', async (req, res) => {
+    bookingController.getCalendar().then((calendar) => {
+        res.status(StatusCodes.OK).json(calendar[req.params.number_plate])
+    }).catch((error) => {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
+    })
+})
 
 // create a booking
 router.post('/', async (req, res) => {
@@ -36,7 +43,7 @@ router.post('/', async (req, res) => {
 // get a booking by id
 router.get('/:id', async (req, res) => {
     bookingController.getBookingById(req.params.id).then((booking) => {
-        res.status(StatusCodes.OK).json(booking)
+        res.status(StatusCodes.OK).json([booking])
     }).catch((error) => {
         res.status(error.code).json({ success: false, message: error.data })
     })

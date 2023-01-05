@@ -1,6 +1,6 @@
 import Booking from '../models/objects/booking.model.js'
 import CreateBookingRequest from '../models/web/createBookingRequest.js'
-import userController from './user.controller.js';
+import vehicleController from './vehicle.controller.js';
 import { StatusCodes } from 'http-status-codes';
 
 const getAllBookings = () => {
@@ -61,12 +61,14 @@ const createBooking = (request) => {
       }
     })
 
-    let availability
-    userController.getUser(createBookingRequest.booker_id).then((user) => {
-      availability = user.availability
-    }).catch((error) => {
-      return reject(error)
+    vehicleController.getVehicle().then((vehicle) => {
+      availability = vehicle.available
+      console.log(availability)
+      if(!vehicle.available){
+        return reject({ code: StatusCodes.BAD_REQUEST, data: 'Vehicle is not available' })
+      }
     })
+
 
     // create booking object
     let booking
