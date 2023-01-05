@@ -83,7 +83,6 @@ const createBooking = (request) => {
       number_plate: booking.number_plate,
       from_date: { $lte: booking.to_date },
       to_date: { $gte: booking.from_date },
-      paid: false
     })
 
     // if overlap, reject
