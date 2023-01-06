@@ -168,6 +168,32 @@ describe("Testing the booking controller", () => {
             })
         })
 
+        it("it should reject if vehicle is not available", (done) => {
+            const request = {
+                "booker_id": '63ae05b628347818c81e10f2',
+                "number_plate": 'ABC123',
+                "from_date": '12-12-2022',
+                "to_date": '13-12-2022',
+            }
+
+            let getVehicleStub = sandbox.stub(vehicleController, 'getVehicle').resolves({
+                "number_plate": "ABC123",
+                "price": 100,
+                "available": false,
+                "model": "BMW",
+                "brand": "X3",
+                "capacity": 5,
+            })
+
+            bookingController.createBooking(request).catch((error) => {
+                // expect(getVehicleStub).to.have.been.called
+                // expect(error).to.be.an('object')
+                console.log(error)
+                // expect(error.code).to.be.equal(400)
+                done()
+            })
+        })
+
         it("it should reject if the request is invalid", (done) => {
             const request = {
                 "booker_id": '63ae05basdsa628347818c81e10f2',

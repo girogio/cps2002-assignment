@@ -62,7 +62,6 @@ const createBooking = (request) => {
     })
 
     vehicleController.getVehicle().then((vehicle) => {
-      availability = vehicle.available
       if (!vehicle.available) {
         return reject({ code: StatusCodes.BAD_REQUEST, data: 'Vehicle is not available' })
       }

@@ -44,7 +44,6 @@ router.get('/calendar/:number_plate', async (req, res) => {
 
 // create a booking
 router.post('/', async (req, res) => {
-
     if (req.body.booker_id == undefined) {
         res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: "Bad request, booker_id is required" })
     } else if (req.body.number_plate == undefined) {
