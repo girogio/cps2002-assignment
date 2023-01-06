@@ -1,6 +1,7 @@
 import axios from 'axios'
 import mongoose from 'mongoose'
 import userController from '../../controllers/user.controller.js'
+import { StatusCodes } from 'http-status-codes'
 
 const bookingSchema = new mongoose.Schema({
     booker_id: {
@@ -41,14 +42,14 @@ const bookingSchema = new mongoose.Schema({
                     axios.patch(process.env.USER_API_URL + this.booker_id, {
                         balance: user.balance - this.price
                     }).catch(() => {
-                        return reject({ code: 500, data: "Error updating user balance" })
+                        return reject({ code: StatusCodes.NOT_ACCEPTABLE, data: "Error updating user balance" })
                     })
 
                     this.paid = true
 
                     this.save()
 
-                    return resolve({ code: 200, data: "Booking paid" })
+                    return resolve({ code: StatusCodes.OK, data: "Booking paid" })
 
                 }).catch((err) => {
                     return reject(err)
