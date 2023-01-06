@@ -55,8 +55,42 @@ describe("Testing the user controller", () => {
         expect(error.data).to.equal("User not found.");
         done();
       })
-
     })
+
+      it("should resolve if the email is found", (done) => {
+          
+          // stub the findOne method of the User model (returns sampleUser)
+          let findOneStub = sandbox
+            .stub(mongoose.Model, "findOne")
+            .resolves(sampleUser);
+  
+          userController.getUserByEmail("asd").then((response) => {
+            expect(response.code).to.equal(200);
+            expect(response.data).to.equal(sampleUser);
+            done();
+          })
+  
+        })
+
+        it("should reject if the findOne method fails", (done) => {
+
+          // stub the findOne method of the User model (returns null)
+          let findOneStub = sandbox
+            .stub(mongoose.Model, "findOne")
+            .resolves(null);
+  
+          userController.getUserByEmail("asd").then(() => { })
+  
+          userController.getUserByEmail("asd").catch((error) => {
+            expect(error.code).to.equal(404);
+
+            expect(error.data).to.equal("User not found.");
+            done();
+          })
+  
+
+        })
+
 
   })
 
@@ -248,6 +282,24 @@ describe("Testing the user controller", () => {
         done()
       })
     })
+    
+    it("it should resolve and not change a user if no data is given", (done) => {
+      
+      let editedUser = {
+        name: "",
+        email: "",
+      }
+
+      // stub the save method 
+        let saveStub = sandbox
+        .stub(mongoose.Model.prototype, "save")
+        .resolves();
+
+      userController.findByIdAndUpdate("1234", editedUser).then(() => {
+        done()
+      })
+    })
+
 
     it("it should reject if save method fails", (done) => {
 
@@ -262,5 +314,6 @@ describe("Testing the user controller", () => {
         done()
       })
     })
+
   })
 });
